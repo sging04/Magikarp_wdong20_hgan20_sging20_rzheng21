@@ -1,10 +1,28 @@
+class Ship:
+	def __init__(self, length:int, location:tuple, vertical:bool):
+		"""
+		Parameters
+		----------
+		length : int
+			The length of the ship
+		location : tuple
+			(x, y) of the left most/top most space the ship occupies
+		vertical : bool
+			whether or not the ship is vertical
+		"""
+		self.length = length
+		self.location = location
+
+
+
 class Battleship:
 	def __init__(self):
+		# the player board representations
 		self.boards = {
 			1: [[0 for y in range(7)] for x in range(7)],
 			2: [[0 for y in range(7)] for x in range(7)]
 		}
-
+		# the ship sizes available
 		self.ship_sizes = [2, 3, 3, 4, 5]
 
 	def __str__(self) -> str:
@@ -18,6 +36,27 @@ class Battleship:
 		return string
 
 	def hit(player:int, coord:tuple) -> bool:
+		"""
+		Checks if the player shot at was hit, and if so marks it.
+
+		Parameters
+		----------
+		player : int
+			The player being shot at
+		coord : tuple
+			The (x, y) coordinate where the shot is being aimed at
+
+		Returns
+		-------
+		bool
+			Whether or not the hit landed.
+
+		Extra
+		-----
+		Positive numbers represent ships, with the number being the length of the ship. (note this was for checking if a ship sinks, but since there's 2 threes that may be a problem)
+		0 is an empty space
+		Negative numbers represent hit sections, with the magnitude corresponding to ship length.
+		"""
 		if player not in self.boards:
 			raise KeyError("Player does not exist")
 		elif coord[0] >= len(self.boards[player]) or coord[1] >= len(self.boards[player][0]):
