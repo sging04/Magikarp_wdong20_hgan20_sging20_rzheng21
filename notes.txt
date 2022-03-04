@@ -3,6 +3,7 @@ Softdev
 P02
 2022-03-04
 
+
 Sample Entry: firstL -- TIMESTAMP\n ( e.g.: topherM -- 1999-12-31 23:59 )
 
 Begin Devlog:
