@@ -1,16 +1,31 @@
 class Battleship:
 	class Ship:
-		def __check_valid_location__(location:tuple, vertical:bool, length:int) -> bool:
+		def __check_valid_location__(game:Battleship, location:tuple, vertical:bool, length:int) -> bool:
 			"""
 			Parameters
 			----------
+			game : Battleship
+				The game in which the ship exists
 			length : int
 				The length of the ship
 			location : tuple
-				(x, y) of the left most/top most space the ship occupies
+				(x, y) of the left most/top most space the ship occupies. 0 indexed.
 			vertical : bool
 				whether or not the ship is vertical
+
+			Returns
+			-------
+			Whether or not the ship is placed in a valid location
 			"""
+
+			if location[0] >= game.length or location[1] >= game.width:
+				return False # check to see if the starting location is even in the board
+			else:
+				if vertical == True:
+					return location[1] + length < game.height
+				else:
+					return location[1] + length < game.width
+
 
 
 		def __init__(self, game:Battleship, length:int, location:tuple, vertical:bool):
@@ -22,10 +37,11 @@ class Battleship:
 			length : int
 				The length of the ship
 			location : tuple
-				(x, y) of the left most/top most space the ship occupies
+				(x, y) of the left most/top most space the ship occupies. 0 indexed.
 			vertical : bool
 				whether or not the ship is vertical
 			"""
+			self.game = game
 			self.length = length
 			self.location = location
 			self.vertical = vertical
