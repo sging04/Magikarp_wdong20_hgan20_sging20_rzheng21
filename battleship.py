@@ -1,20 +1,33 @@
-class Ship:
-	def __init__(self, length:int, location:tuple, vertical:bool):
-		"""
-		Parameters
-		----------
-		length : int
-			The length of the ship
-		location : tuple
-			(x, y) of the left most/top most space the ship occupies
-		vertical : bool
-			whether or not the ship is vertical
-		"""
-		self.length = length
-		self.location = location
-		self.vertical = vertical
-
 class Battleship:
+	class Ship:
+		def __check_valid_location__(location:tuple, vertical:bool, length:int) -> bool:
+			"""
+			Parameters
+			----------
+			length : int
+				The length of the ship
+			location : tuple
+				(x, y) of the left most/top most space the ship occupies
+			vertical : bool
+				whether or not the ship is vertical
+			"""
+
+
+		def __init__(self, length:int, location:tuple, vertical:bool):
+			"""
+			Parameters
+			----------
+			length : int
+				The length of the ship
+			location : tuple
+				(x, y) of the left most/top most space the ship occupies
+			vertical : bool
+				whether or not the ship is vertical
+			"""
+			self.length = length
+			self.location = location
+			self.vertical = vertical
+	
 	def __init__(self):
 		# the player board representations
 		self.boards = {
