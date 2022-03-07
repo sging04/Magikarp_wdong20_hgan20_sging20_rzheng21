@@ -13,10 +13,12 @@ class Battleship:
 			"""
 
 
-		def __init__(self, length:int, location:tuple, vertical:bool):
+		def __init__(self, game:Battleship, length:int, location:tuple, vertical:bool):
 			"""
 			Parameters
 			----------
+			game : Battleship
+				The game in which the ship exists
 			length : int
 				The length of the ship
 			location : tuple
@@ -27,7 +29,10 @@ class Battleship:
 			self.length = length
 			self.location = location
 			self.vertical = vertical
-	
+
+	def __new_ship__(self, location:tuple, vertical:bool, length:int) -> Ship:
+		return Ship(self, location, vertical, length)
+
 	def __init__(self):
 		# the player board representations
 		self.boards = {
