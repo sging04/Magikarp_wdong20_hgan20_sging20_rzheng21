@@ -26,8 +26,6 @@ class Battleship:
 				else:
 					return location[1] + length < game.width
 
-
-
 		def __init__(self, game:Battleship, length:int, location:tuple, vertical:bool):
 			"""
 			Parameters
@@ -41,10 +39,13 @@ class Battleship:
 			vertical : bool
 				whether or not the ship is vertical
 			"""
-			self.game = game
-			self.length = length
-			self.location = location
-			self.vertical = vertical
+			if __check_valid_location__(game, location, vertical, length):
+				self.game = game
+				self.length = length
+				self.location = location
+				self.vertical = vertical
+			else:
+				raise InputError(f"The ship placement is invalid because part or all of the ship is off the board.\nLocation:{location} | Game:{game} | Vertical:{vertical} | Length:{length}")
 
 	def __new_ship__(self, location:tuple, vertical:bool, length:int) -> Ship:
 		return Ship(self, location, vertical, length)
