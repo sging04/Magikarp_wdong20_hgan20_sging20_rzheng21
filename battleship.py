@@ -12,8 +12,7 @@ class Ship:
 		"""
 		self.length = length
 		self.location = location
-
-
+		self.vertical = vertical
 
 class Battleship:
 	def __init__(self):
