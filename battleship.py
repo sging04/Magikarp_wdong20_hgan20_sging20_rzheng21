@@ -33,12 +33,10 @@ class Battleship:
 	def __new_ship__(self, location:tuple, vertical:bool, length:int) -> Ship:
 		return Ship(self, location, vertical, length)
 
-	def __init__(self):
-		# the player board representations
-		self.boards = {
-			1: [[0 for y in range(7)] for x in range(7)],
-			2: [[0 for y in range(7)] for x in range(7)]
-		}
+	def __init__(self, height:int=7, width:int=7):
+		# the board stats
+		self.height = height
+		self.width = width
 		# the ship sizes available
 		self.ship_sizes = [2, 3, 3, 4, 5]
 
