@@ -22,9 +22,9 @@ class Battleship:
 				return False # check to see if the starting location is even in the board
 			else:
 				if vertical == True:
-					return location[1] + length < game.height
+					return location[1] + length < game.height - 1
 				else:
-					return location[1] + length < game.width
+					return location[1] + length < game.width - 1
 
 		def __init__(self, game:Battleship, length:int, location:tuple, vertical:bool):
 			"""
