@@ -88,37 +88,4 @@ class Battleship:
 
 		return string
 
-	def hit(player:int, coord:tuple) -> bool:
-		"""
-		Checks if the player shot at was hit, and if so marks it.
-
-		Parameters
-		----------
-		player : int
-			The player being shot at
-		coord : tuple
-			The (x, y) coordinate where the shot is being aimed at
-
-		Returns
-		-------
-		bool
-			Whether or not the hit landed.
-
-		Extra
-		-----
-		Positive numbers represent ships, with the number being the length of the ship. (note this was for checking if a ship sinks, but since there's 2 threes that may be a problem)
-		0 is an empty space
-		Negative numbers represent hit sections, with the magnitude corresponding to ship length.
-		"""
-		if player not in self.boards:
-			raise KeyError("Player does not exist")
-		elif coord[0] >= len(self.boards[player]) or coord[1] >= len(self.boards[player][0]):
-			return ValueError("Coordinate does not exist")
-		else:
-			if self.boards[player][coord[0]][coord[1]] != 0:
-				self.boards[player][coord[0]][coord[1]] = -self.boards[player][coord[0]][coord[1]]
-				return True
-			else:
-				self.boards[player][coord[0]][coord[1]] = -max(self.ship_sizes) + 1
-				return False
 print(Battleship())
