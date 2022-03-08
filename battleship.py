@@ -26,7 +26,7 @@ class Battleship:
 				else:
 					return location[1] + length < game.width - 1
 
-		def __init__(self, game:Battleship, length:int, location:tuple, vertical:bool):
+		def __init__(self, game:Battleship, length:int, location:tuple, vertical:bool, player:int):
 			"""
 			Parameters
 			----------
@@ -44,6 +44,7 @@ class Battleship:
 				self.length = length
 				self.location = location
 				self.vertical = vertical
+				self.player = player
 
 				#keeps track of which ship segments have been hit
 				self.hits = {}
