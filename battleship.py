@@ -91,6 +91,9 @@ class Battleship:
 			else:
 				return False
 
+		def __str__(self):
+			return f"Length: {length} | Location: {location} | Vertical: {vertical} | Player: {player}"
+
 	def __new_ship__(self, location:tuple, vertical:bool, length:int, player:int) -> Ship:
 		return Ship(self, location, vertical, length, player)
 
