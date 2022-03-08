@@ -44,8 +44,29 @@ class Battleship:
 				self.length = length
 				self.location = location
 				self.vertical = vertical
+
+				#keeps track of which ship segments have been hit
+				self.hits = {}
+				for i in range(length):
+					if vertical:
+						self.hits[(location[0], location[1] + i)] = False
+					else:
+						self.hits[(location[0] + i, location[1])] = False
 			else:
 				raise InputError(f"The ship placement is invalid because part or all of the ship is off the board.\nLocation:{location} | Game:{game} | Vertical:{vertical} | Length:{length}")
+
+		def hit(self, location:tuple) -> bool:
+			if location in self.hits:
+				self.hits[location] = True
+				return True
+			else:
+				return False
+
+		def sunk(self) -> bool:
+			if False not in self.hits.values():
+				return True
+			else:
+				return False
 
 	def __new_ship__(self, location:tuple, vertical:bool, length:int) -> Ship:
 		return Ship(self, location, vertical, length)
