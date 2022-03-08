@@ -69,8 +69,8 @@ class Battleship:
 			else:
 				return False
 
-	def __new_ship__(self, location:tuple, vertical:bool, length:int) -> Ship:
-		return Ship(self, location, vertical, length)
+	def __new_ship__(self, location:tuple, vertical:bool, length:int, player:int) -> Ship:
+		return Ship(self, location, vertical, length, player)
 
 	def __init__(self, height:int=7, width:int=7):
 		# the board stats
