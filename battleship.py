@@ -1,6 +1,6 @@
 class Battleship:
 	class Ship:
-		def __check_valid_location__(game:Battleship, location:tuple, vertical:bool, length:int) -> bool:
+		def __check_valid_location__(game:Battleship, location:tuple, vertical:bool, length:int, player:int) -> bool:
 			"""
 			Parameters
 			----------
@@ -12,11 +12,33 @@ class Battleship:
 				(x, y) of the left most/top most space the ship occupies. 0 indexed.
 			vertical : bool
 				whether or not the ship is vertical
+			player : int
+				which player's board it's on
 
 			Returns
 			-------
 			Whether or not the ship is placed in a valid location
 			"""
+
+			def ship_collision(game:Battleship, location:tuple, vertical:bool, length:int, player:int):
+				"""
+				Parameters
+				----------
+				game : Battleship
+					The game in which the ship exists
+				length : int
+					The length of the ship
+				location : tuple
+					(x, y) of the left most/top most space the ship occupies. 0 indexed.
+				vertical : bool
+					whether or not the ship is vertical
+				player : int
+					which player's board it's on
+
+				Returns
+				-------
+				Whether or not the ship overlaps with another ship
+				"""
 
 			if location[0] >= game.length or location[1] >= game.width:
 				return False # check to see if the starting location is even in the board
@@ -71,6 +93,10 @@ class Battleship:
 
 	def __new_ship__(self, location:tuple, vertical:bool, length:int, player:int) -> Ship:
 		return Ship(self, location, vertical, length, player)
+
+	def __randomize_ship_placement__(self):
+		for size in self.ship_sizes:
+
 
 	def __init__(self, height:int=7, width:int=7):
 		# the board stats
