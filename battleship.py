@@ -1,6 +1,6 @@
 class Battleship:
 	class Ship:
-		def __check_valid_location__(game:Battleship, location:tuple, vertical:bool, length:int, player:int) -> bool:
+		def check_valid_location(game:Battleship, location:tuple, vertical:bool, length:int, player:int) -> bool:
 			"""
 			Parameters
 			----------
@@ -19,34 +19,13 @@ class Battleship:
 			-------
 			Whether or not the ship is placed in a valid location
 			"""
+			# this is a very naive solution but it works (other solution would be checking line overlaps but I don't want to do that + this is more generalizable)
+			for ship in game.players[player]:
+				locations = ship.get_locations()
 
-			def ship_collision(game:Battleship, location:tuple, vertical:bool, length:int, player:int):
-				"""
-				Parameters
-				----------
-				game : Battleship
-					The game in which the ship exists
-				length : int
-					The length of the ship
-				location : tuple
-					(x, y) of the left most/top most space the ship occupies. 0 indexed.
-				vertical : bool
-					whether or not the ship is vertical
-				player : int
-					which player's board it's on
-
-				Returns
-				-------
-				Whether or not the ship overlaps with another ship
-				"""
-
-			if location[0] >= game.length or location[1] >= game.width:
-				return False # check to see if the starting location is even in the board
-			else:
-				if vertical == True:
-					return location[1] + length < game.height - 1
-				else:
-					return location[1] + length < game.width - 1
+				for location in self.hits.keys():
+					if location in locations:
+						return False
 
 		def __init__(self, game:Battleship, length:int, location:tuple, vertical:bool, player:int):
 			"""
@@ -61,20 +40,18 @@ class Battleship:
 			vertical : bool
 				whether or not the ship is vertical
 			"""
-			if __check_valid_location__(game, location, vertical, length):
+			self.hits = {}
+			for i in range(length):
+				if vertical:
+					self.hits[(location[0], location[1] + i)] = False
+				else:
+					self.hits[(location[0] + i, location[1])] = False
+
+			if check_valid_location(game, location, vertical, length):
 				self.game = game
 				self.length = length
 				self.location = location
 				self.vertical = vertical
-				self.player = player
-
-				#keeps track of which ship segments have been hit
-				self.hits = {}
-				for i in range(length):
-					if vertical:
-						self.hits[(location[0], location[1] + i)] = False
-					else:
-						self.hits[(location[0] + i, location[1])] = False
 			else:
 				raise InputError(f"The ship placement is invalid because part or all of the ship is off the board.\nLocation:{location} | Game:{game} | Vertical:{vertical} | Length:{length}")
 
@@ -84,6 +61,9 @@ class Battleship:
 				return True
 			else:
 				return False
+
+		def get_locations(self) -> list:
+			return list(self.hits.keys())
 
 		def sunk(self) -> bool:
 			if False not in self.hits.values():
@@ -107,6 +87,14 @@ class Battleship:
 		self.width = width
 		# the ship sizes available
 		self.ship_sizes = [2, 3, 3, 4, 5]
+
+		player_num = 2
+		self.players = {}
+
+		for i in range(player_num):
+			self.players{i} = []
+
+		__randomize_ship_placement__()
 
 	def __str__(self) -> str:
 		string = ""
