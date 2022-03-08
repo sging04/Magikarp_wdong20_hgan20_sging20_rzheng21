@@ -27,6 +27,12 @@ class Battleship:
 					if location in locations:
 						return False
 
+			for location in self.hits.keys():
+				if (location[0] >= game.width or location[0] < 0) or (location[1] >= game.height or location[0] < 0):
+					return False
+
+			return True
+
 		def __init__(self, game:Battleship, length:int, location:tuple, vertical:bool, player:int):
 			"""
 			Parameters
