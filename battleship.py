@@ -1,3 +1,5 @@
+import random
+
 class Battleship:
 	class Ship:
 		def check_valid_location(game:Battleship, location:tuple, vertical:bool, length:int, player:int) -> bool:
@@ -83,9 +85,16 @@ class Battleship:
 	def __new_ship__(self, location:tuple, vertical:bool, length:int, player:int) -> Ship:
 		return Ship(self, location, vertical, length, player)
 
-	def __randomize_ship_placement__(self):
+	def __randomize_ship_placement__(self, player:int = 1):
 		for size in self.ship_sizes:
+			location = (random.randint(0, self.width), random.randint(0, self.height))
+			vertical = random.randint(0, 1) == 1
 
+			while not Ship.check_valid_location(self, location, vertical, size, player):
+				location = location = (random.randint(0, self.width), random.randint(0, self.height))
+				vertical = random.randint(0, 1) == 1
+
+			self.players[player].append(__new_ship__(location, vertical, size, player))
 
 	def __init__(self, height:int=7, width:int=7):
 		# the board stats
