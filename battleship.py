@@ -2,7 +2,7 @@ import random
 
 class Battleship:
 	class Ship:
-		def check_valid_location(game:'Battleship', location:tuple, vertical:bool, length:int, player:int) -> bool:
+		def check_valid_location(self, game:'Battleship', location:tuple, vertical:bool, length:int, player:int) -> bool:
 			"""
 			Parameters
 			----------
@@ -89,12 +89,16 @@ class Battleship:
 		for size in self.ship_sizes:
 			location = (random.randint(0, self.width), random.randint(0, self.height))
 			vertical = random.randint(0, 1) == 1
+			ship = None
 
-			while not Ship.check_valid_location(self, location, vertical, size, player):
-				location = (random.randint(0, self.width), random.randint(0, self.height))
-				vertical = random.randint(0, 1) == 1
+			while ship == None:
+				try:
+					ship = self.__new_ship__(location, vertical, size, player)
+				except:
+					location = (random.randint(0, self.width), random.randint(0, self.height))
+					vertical = random.randint(0, 1) == 1
 
-			self.players[player].append(__new_ship__(location, vertical, size, player))
+			self.players[player].append(ship)
 
 	def __init__(self, height:int=7, width:int=7):
 		# the board stats
