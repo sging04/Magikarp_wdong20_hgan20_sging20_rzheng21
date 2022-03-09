@@ -17,6 +17,8 @@ and once again clarify that the user profile includes both the player's ongoing 
 
 Moved the ship date to a later date, since once group suggested we do that.
 
-
-
+wenhaoD -- 2022-03-09 08:34
+Started work on a database.py file.
+Only simple login and register is set up.
+Further testing is needed.
 
