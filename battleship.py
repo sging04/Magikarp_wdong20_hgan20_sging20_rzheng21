@@ -114,8 +114,16 @@ class Battleship:
 	def __str__(self) -> str:
 		string = ""
 
-		for player, board in self.boards.items():
+		for player, ships in self.players.items():
 			string += f"{player}:\n"
+			board = [[0 for i in range(self.width)] for i in range(self.height)]
+
+			for ship in ships:
+				locations = ship.get_locations()
+
+				for location in locations:
+					board[location[1]][location[0]] = len(locations)
+
 			for row in board:
 				string += f"{row}\n"
 
