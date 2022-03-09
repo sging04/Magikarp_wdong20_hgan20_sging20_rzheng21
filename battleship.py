@@ -91,7 +91,7 @@ class Battleship:
 			vertical = random.randint(0, 1) == 1
 
 			while not Ship.check_valid_location(self, location, vertical, size, player):
-				location = location = (random.randint(0, self.width), random.randint(0, self.height))
+				location = (random.randint(0, self.width), random.randint(0, self.height))
 				vertical = random.randint(0, 1) == 1
 
 			self.players[player].append(__new_ship__(location, vertical, size, player))
