@@ -2,7 +2,7 @@ import random
 
 class Battleship:
 	class Ship:
-		def check_valid_location(game:Battleship, location:tuple, vertical:bool, length:int, player:int) -> bool:
+		def check_valid_location(game:'Battleship', location:tuple, vertical:bool, length:int, player:int) -> bool:
 			"""
 			Parameters
 			----------
@@ -35,7 +35,7 @@ class Battleship:
 
 			return True
 
-		def __init__(self, game:Battleship, length:int, location:tuple, vertical:bool, player:int):
+		def __init__(self, game:'Battleship', length:int, location:tuple, vertical:bool, player:int):
 			"""
 			Parameters
 			----------
