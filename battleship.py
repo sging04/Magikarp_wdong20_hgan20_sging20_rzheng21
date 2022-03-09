@@ -113,7 +113,7 @@ class Battleship:
 		for i in range(player_num):
 			self.players[i] = []
 
-		__randomize_ship_placement__()
+		self.__randomize_ship_placement__()
 
 	def __str__(self) -> str:
 		string = ""
