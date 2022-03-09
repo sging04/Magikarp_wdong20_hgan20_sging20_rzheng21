@@ -107,7 +107,7 @@ class Battleship:
 		self.players = {}
 
 		for i in range(player_num):
-			self.players{i} = []
+			self.players[i] = []
 
 		__randomize_ship_placement__()
 
