@@ -38,4 +38,20 @@ rprint(result == "hello2", "fetch_username returns correct username when given v
 result = db.fetch_username(3)
 rprint(result is None, "fetch_username returns None when given invalid id")
 
+# Profile picture tests
+result = db.set_picture(1, "test")
+rprint(result == True, "set_picture returns True when given a valid user id")
+
+result = db.set_picture(10, "test")
+rprint(result == False, "set_picture returns False when given an invalid user id")
+
+result = db.fetch_picture(1)
+rprint(result == "test", "fetch_picture returns a picture when given a valid user id")
+
+result = db.fetch_picture(2)
+rprint(result == "", "fetch_picture returns a default picture when given the user id of a user that hasn't updated their profile picture")
+
+result = db.fetch_picture(10)
+rprint(result is None, "fetch_picture returns None when given an invalid user id")
+
 db.close()
