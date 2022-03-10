@@ -1,7 +1,7 @@
 from database import Database
 
 def rprint(success: bool, message: str):
-    tag = "[OK]" if success else "[FAIL]"
+    tag = "\033[92m[OK]\033[0m" if success else "\033[91m[FAIL]\033[0m"
     print(f"{tag} {message}")
 
 db = Database(":memory:")
