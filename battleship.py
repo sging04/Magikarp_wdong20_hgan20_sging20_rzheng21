@@ -55,7 +55,7 @@ class Battleship:
 				else:
 					self.hits[(location[0] + i, location[1])] = False
 
-			if self.check_valid_location(game, location, vertical, length):
+			if self.check_valid_location(game, location, vertical, length, player):
 				self.game = game
 				self.length = length
 				self.location = location
