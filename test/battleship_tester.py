@@ -8,6 +8,9 @@ sys.path.append(path.dirname(path.dirname(path.abspath(__file__)))+ "/app")
 from app.battleship import Battleship
 
 def check_board_gen(tests:int = 100) -> bool:
+	"""
+	Tests the AI board generation. Gets collisions as well, making sure there's no overlap.
+	"""
 	tests = 100
 	expected_ships = {
 		2 : 2,
