@@ -61,7 +61,7 @@ class Battleship:
 				self.location = location
 				self.vertical = vertical
 			else:
-				raise InputError(f"The ship placement is invalid because part or all of the ship is off the board.\nLocation:{location} | Game:{game} | Vertical:{vertical} | Length:{length}")
+				raise ValueError(f"The ship placement is invalid because part or all of the ship is off the board.\nLocation:{location} | Game:{game} | Vertical:{vertical} | Length:{length}")
 
 		def hit(self, location:tuple) -> bool:
 			if location in self.hits:
@@ -94,7 +94,7 @@ class Battleship:
 			while ship == None:
 				try:
 					ship = self.__new_ship__(location, vertical, size, player)
-				except InputError as e:
+				except ValueError as e:
 					print(e)
 					location = (random.randint(0, self.width), random.randint(0, self.height))
 					vertical = (random.randint(0, 1) == 1)
