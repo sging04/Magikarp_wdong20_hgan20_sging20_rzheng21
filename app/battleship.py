@@ -155,18 +155,23 @@ class Battleship:
 
 		self.__randomize_ship_placement__()
 
+	def return_board_as_array(self, player:int) -> list:
+		board = [[0 for y in range(self.width)] for x in range(self.height)]
+
+		for ship in self.players[player]:
+			locations = ship.get_locations()
+
+			for location in locations:
+				board[location[1]][location[0]] = ship.length
+
+		return board
+	
 	def __str__(self) -> str:
 		string = ""
 
-		for player, ships in self.players.items():
+		for player in self.players:
 			string += f"{player}:\n"
-			board = [[0 for y in range(self.width)] for x in range(self.height)]
-
-			for ship in ships:
-				locations = ship.get_locations()
-
-				for location in locations:
-					board[location[1]][location[0]] = len(locations)
+			board = self.return_board_as_array(player)
 
 			for row in board:
 				string += f"{row}\n"
