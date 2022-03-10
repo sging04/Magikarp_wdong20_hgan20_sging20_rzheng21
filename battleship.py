@@ -83,7 +83,7 @@ class Battleship:
 			return f"Length: {length} | Location: {location} | Vertical: {vertical} | Player: {player}"
 
 	def __new_ship__(self, location:tuple, vertical:bool, length:int, player:int) -> Ship:
-		return Ship(self, location, vertical, length, player)
+		return self.Ship(self, location, vertical, length, player)
 
 	def __randomize_ship_placement__(self, player:int = 1):
 		for size in self.ship_sizes:
