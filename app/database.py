@@ -14,7 +14,8 @@ class Database:
         # TODO: Create database for saved games
 
         self.db.commit()
-    
+
+
     def close(self):
         self.db.close()
 
@@ -24,12 +25,6 @@ class Database:
         Gets the id of the user with the given username/password combination from the database.
         Returns None if the combination is incorrect.
         """
-        old_factory = self.db.row_factory
-
-        # The following line turns the tuple into a single value (sqlite3 commands always return a tuple, even when it is one value)
-        # You can read more about row_factory in the official docs:
-        # https://docs.python.org/3/library/sqlite3.html#sqlite3.Connection.row_factory
-        self.db.row_factory = lambda _, row: row[0]
 
         self.cur.execute("""
             SELECT id
@@ -41,9 +36,7 @@ class Database:
         # user_id is None if no matches were found
         user_id = self.cur.fetchone()
 
-        self.db.row_factory = old_factory
-
-        return user_id
+        return index_nullable(user_id, 0)
 
 
     def register_user(self, username: str, password: str) -> bool:
@@ -56,7 +49,7 @@ class Database:
 
         if row is not None:
             return False
-        
+
         self.cur.execute("""INSERT INTO users(username,password) VALUES(?, ?)""",(username,password))
         self.db.commit()
         return True
@@ -66,12 +59,12 @@ class Database:
         """
         Returns the username of the user with the given id.
         """
-        old_factory = self.db.row_factory
-
-        self.db.row_factory = lambda curr, row: row[0]
-
         self.cur.execute("SELECT username FROM users WHERE id = ?", (user_id,))
-        username = self.cur.fetchone()
+        username = index_nullable(self.cur.fetchone(), 0)
 
-        self.db.row_factory = old_factory
         return username
+
+
+def index_nullable(nullable, index: int):
+    if nullable is not None:
+	    return nullable[index]
