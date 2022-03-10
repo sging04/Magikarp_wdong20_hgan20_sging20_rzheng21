@@ -88,15 +88,16 @@ class Battleship:
 	def __randomize_ship_placement__(self, player:int = 1):
 		for size in self.ship_sizes:
 			location = (random.randint(0, self.width), random.randint(0, self.height))
-			vertical = random.randint(0, 1) == 1
+			vertical = (random.randint(0, 1) == 1)
 			ship = None
 
 			while ship == None:
 				try:
 					ship = self.__new_ship__(location, vertical, size, player)
-				except:
+				except InputError as e:
+					print(e)
 					location = (random.randint(0, self.width), random.randint(0, self.height))
-					vertical = random.randint(0, 1) == 1
+					vertical = (random.randint(0, 1) == 1)
 
 			self.players[player].append(ship)
 
