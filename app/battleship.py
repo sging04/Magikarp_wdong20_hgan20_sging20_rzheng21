@@ -124,7 +124,7 @@ class Battleship:
 
 			while ship == None:
 				try:
-					ship = self.Ship(self, location, vertical, length, player)
+					ship = self.Ship(self, location, vertical, size, player)
 				except ValueError as e:
 					debug_print(e)
 					location = (random.randint(0, self.width), random.randint(0, self.height))
