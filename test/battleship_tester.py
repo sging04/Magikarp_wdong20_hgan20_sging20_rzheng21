@@ -5,17 +5,25 @@ from os import path
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__)))+ "/app")
 #imports from ../app/battleship.py
-from app import battleship
+from app.battleship import Battleship
 
 def check_board_gen(tests:int = 100) -> bool:
 	tests = 100
 	expected_ships = {
-		2 : 2
-		3 : 6
-		4 : 4
+		2 : 2,
+		3 : 6,
+		4 : 4,
 		5 : 5
 	} #expected amount of each ship segment
 
 	for i in range(tests):
 		game = Battleship()
-		
+		board = str(game.return_board_as_array(1)) # gets board for the AI
+
+		for ship, segments in expected_ships.items():
+			if board.count(str(ship)) != segments:
+				return False
+
+		return True
+
+print(check_board_gen())
