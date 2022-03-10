@@ -1,5 +1,9 @@
 import random
 
+def debug_print(input:str, DEBUG=False):
+	if DEBUG:
+		print(input)
+
 class Battleship:
 	class Ship:
 		def check_valid_location(self, game:'Battleship', location:tuple, vertical:bool, length:int, player:int) -> bool:
@@ -95,7 +99,7 @@ class Battleship:
 				try:
 					ship = self.__new_ship__(location, vertical, size, player)
 				except ValueError as e:
-					print(e)
+					debug_print(e)
 					location = (random.randint(0, self.width), random.randint(0, self.height))
 					vertical = (random.randint(0, 1) == 1)
 
