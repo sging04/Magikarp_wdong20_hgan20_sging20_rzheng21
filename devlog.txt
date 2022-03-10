@@ -1,0 +1,24 @@
+Magikarp - Sean Ging, Haotian Gan, Reng geng Zheng, Wen Hao Dong
+Softdev
+P02
+2022-03-04
+
+Sample Entry: firstL -- TIMESTAMP\n ( e.g.: topherM -- 1999-12-31 23:59 )
+
+Begin Devlog:
+
+haotianG -- 2022-03-08 12:56am
+In our concept bullet points (page 1), we elaborated on the computer algorithm we plan on implementing for our battleship computer player.
+We also elaborate on what we will do to implement short-polling and clarify that the profile page will include both the player's ongoing and finished games.
+We decided to take a suggestion that we allow players to use both the mouse pointer and WASD + Enter to make moves. 
+
+In our program component bullet points (page 2), we elaborate on how "Pass and Play" battleship will work. We clarify that the two boards on the screen are side by side,
+and once again clarify that the user profile includes both the player's ongoing and finished games
+
+Moved the ship date to a later date, since once group suggested we do that.
+
+wenhaoD -- 2022-03-09 08:34
+Started work on a database.py file.
+Only simple login and register is set up.
+Further testing is needed.
+
