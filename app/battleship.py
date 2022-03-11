@@ -64,7 +64,6 @@ class Battleship:
 				self.length = length
 				self.location = location
 				self.vertical = vertical
-				self.current_player = 0
 			else:
 				raise ValueError(f"The ship placement is invalid because part or all of the ship is off the board.\nLocation:{location} | Game:{game} | Vertical:{vertical} | Length:{length}")
 
@@ -155,6 +154,7 @@ class Battleship:
 			self.players[i] = []
 
 		self.__randomize_ship_placement__()
+		self.current_player = 0
 
 	def return_board_as_array(self, player:int) -> list:
 		board = [[0 for y in range(self.width)] for x in range(self.height)]
