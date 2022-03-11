@@ -64,6 +64,7 @@ class Battleship:
 				self.length = length
 				self.location = location
 				self.vertical = vertical
+				self.current_player = 0
 			else:
 				raise ValueError(f"The ship placement is invalid because part or all of the ship is off the board.\nLocation:{location} | Game:{game} | Vertical:{vertical} | Length:{length}")
 
@@ -165,7 +166,7 @@ class Battleship:
 				board[location[1]][location[0]] = ship.length
 
 		return board
-	
+
 	def __str__(self) -> str:
 		string = ""
 
