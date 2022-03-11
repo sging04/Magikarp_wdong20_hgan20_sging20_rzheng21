@@ -158,7 +158,7 @@ class Battleship:
 		for i in range(player_num):
 			self.players[i] = {
 				"ships":[],
-				"hits board":[[False for x in range(self.width)] for y in range(self.height)]
+				"hits board":[[0 for x in range(self.width)] for y in range(self.height)]
 			}
 
 		# places random ship for the ai
@@ -210,6 +210,18 @@ class Battleship:
 		location : tuple
 			(x, y) of where you're hitting
 		"""
+		if self.not_in_board(location):
+			# checks if the hit is in the board
+			raise ValueError(f"{location} is off the board")
+		else:
+			for ship in ships:
+				if ship.hit(location):
+					self.players[self.current_player]["hits board"] = 0
+					return
+
+			self.players[self.current_player]["hits board"] = -1
+
+		self.advance_turn()
 
 	def __str__(self) -> str:
 		string = ""
