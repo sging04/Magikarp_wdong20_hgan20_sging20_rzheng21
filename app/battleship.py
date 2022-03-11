@@ -32,7 +32,7 @@ class Battleship:
 				for location in self.hits.keys():
 					if location in locations:
 						return False
-
+			# checks if the ship locations are still on the board
 			for location in self.hits.keys():
 				if game.not_in_board(location):
 					return False
@@ -52,13 +52,14 @@ class Battleship:
 			vertical : bool
 				whether or not the ship is vertical
 			"""
+			# creates dict of which location on the ship has been hit and not hit
 			self.hits = {}
 			for i in range(length):
 				if vertical:
 					self.hits[(location[0], location[1] + i)] = False
 				else:
 					self.hits[(location[0] + i, location[1])] = False
-
+			# checks if the locations are valid, if so initialize, if not, throw an error
 			if self.check_valid_location(game, location, vertical, length, player):
 				self.game = game
 				self.length = length
@@ -118,10 +119,12 @@ class Battleship:
 			Which player's board are we updating?
 		"""
 		for size in self.ship_sizes:
+			# determines spawn location
 			location = (random.randint(0, self.width), random.randint(0, self.height))
+			# determines verticality
 			vertical = (random.randint(0, 1) == 1)
 			ship = None
-
+			# tries to create ships until a valid one is created
 			while ship == None:
 				try:
 					ship = self.Ship(self, location, vertical, size, player)
@@ -129,7 +132,7 @@ class Battleship:
 					debug_print(e)
 					location = (random.randint(0, self.width), random.randint(0, self.height))
 					vertical = (random.randint(0, 1) == 1)
-
+			# adds valid ship to player ships when created
 			self.players[player]["ships"].append(ship)
 
 	def __init__(self, height:int=7, width:int=7):
@@ -147,24 +150,29 @@ class Battleship:
 		# the ship sizes available
 		self.ship_sizes = [2, 3, 3, 4, 5]
 
+		# player initialization
 		player_num = 2
 		self.players = {}
 
+		# creates the items needed to be tracked for each player
 		for i in range(player_num):
 			self.players[i] = {
 				"ships":[],
 				"hits board":[[False for x in range(self.width)] for y in range(self.height)]
 			}
 
+		# places random ship for the ai
 		self.__randomize_ship_placement__()
+		# starts with player 0
 		self.current_player = 0
 
 	def return_board_as_array(self, player:int) -> list:
+		# creates an array representation of the board. goes board[y][x] like in matrix notation.
 		board = [[0 for x in range(self.width)] for y in range(self.height)]
 
 		for ship in self.players[player]["ships"]:
 			locations = ship.get_locations()
-
+			# places the ship length on the corresponding ship location on the board
 			for location in locations:
 				debug_print(locations)
 				board[location[1]][location[0]] = ship.length
