@@ -192,6 +192,12 @@ class Battleship:
 		"""
 		return (location[0] >= self.width or location[0] < 0) or (location[1] >= self.height or location[1] < 0)
 
+	def advance_turn(self):
+		"""
+		Changes whose turn it is.
+		"""
+		self.current_player += 1
+		self.current_player %= len(self.players)
 
 	def attack(self, player:int, location:tuple):
 		"""
