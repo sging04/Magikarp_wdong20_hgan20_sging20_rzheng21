@@ -37,3 +37,6 @@ wenhaoD -- 2022-03-10 08:36
 Added tests for database.py.
 Fixed fetch_user and fetch_username not returning a non-tuple value.
 Implemented profile_picture column to users table and a set/fetch function for it.
+
+wenhaoD -- 2022-03-11 08:36
+Added simple register and login pages that communicates with database.
