@@ -16,7 +16,7 @@ Enter the following commands
 ```
 $ git clone https://github.com/sging04/Magikarp_wdong20_hgan20_sging20_rzheng21
 $ cd Magikarp_wdong20_hgan20_sging20_rzheng21
-$ pip install -r requirements.txt
+$ pip3 install -r requirements.txt
 $ python3 -m venv <name>
 $ source <name>/bin/activate
 $ cd app
