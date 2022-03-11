@@ -167,6 +167,18 @@ class Battleship:
 
 		return board
 
+	def attack(self, player:int, location:tuple):
+		"""
+		Changes hit board and ships hit status based on attacks.
+
+		Parameters
+		----------
+		player : int
+			The player being attacked
+		location : tuple
+			(x, y) of where you're hitting
+		"""
+
 	def __str__(self) -> str:
 		string = ""
 
