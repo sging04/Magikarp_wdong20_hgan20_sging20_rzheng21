@@ -227,12 +227,17 @@ class Battleship:
 		string = ""
 
 		for player in self.players:
-			string += f"{player}:\n"
+			# prints ships
+			string += f"\n{player}:\nShips\n----\n"
 			board = self.return_board_as_array(player)
-
 			for row in board:
 				string += f"{row}\n"
+			# prints shots
+			string += "Hits\n----\n"
+			for row in self.players[player]["hits board"]:
+				string += f"{row}\n"
 
+			string += '*' * self.width * 3
 		return string
 
 print(Battleship())
