@@ -26,7 +26,7 @@ class Battleship:
 			Whether or not the ship is placed in a valid location
 			"""
 			# this is a very naive solution but it works (other solution would be checking line overlaps but I don't want to do that + this is more generalizable)
-			for ship in game.players[player]:
+			for ship in game.players[player]["ships"]:
 				locations = ship.get_locations()
 
 				for location in self.hits.keys():
