@@ -130,7 +130,7 @@ class Battleship:
 					location = (random.randint(0, self.width), random.randint(0, self.height))
 					vertical = (random.randint(0, 1) == 1)
 
-			self.players[player].append(ship)
+			self.players[player]["ships"].append(ship)
 
 	def __init__(self, height:int=7, width:int=7):
 		"""
@@ -151,15 +151,18 @@ class Battleship:
 		self.players = {}
 
 		for i in range(player_num):
-			self.players[i] = []
+			self.players[i] = {
+				"ships":[],
+				"hits board":[[False for x in range(self.width)] for y in range(self.height)]
+			}
 
 		self.__randomize_ship_placement__()
 		self.current_player = 0
 
 	def return_board_as_array(self, player:int) -> list:
-		board = [[0 for y in range(self.width)] for x in range(self.height)]
+		board = [[0 for x in range(self.width)] for y in range(self.height)]
 
-		for ship in self.players[player]:
+		for ship in self.players[player]["ships"]:
 			locations = ship.get_locations()
 
 			for location in locations:
