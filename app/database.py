@@ -9,8 +9,9 @@ class Database:
             CREATE TABLE IF NOT EXISTS users(
               id INTEGER PRIMARY KEY,
               username TEXT,
-              password TEXT)""")
-        
+              password TEXT,
+              profile_picture TEXT)""")
+
         # TODO: Create database for saved games
 
         self.db.commit()
@@ -50,7 +51,7 @@ class Database:
         if row is not None:
             return False
 
-        self.cur.execute("""INSERT INTO users(username,password) VALUES(?, ?)""",(username,password))
+        self.cur.execute("""INSERT INTO users(username, password, profile_picture) VALUES(?, ?, ?)""", (username, password, ""))
         self.db.commit()
         return True
 
@@ -63,6 +64,34 @@ class Database:
         username = index_nullable(self.cur.fetchone(), 0)
 
         return username
+
+
+    def set_picture(self, user_id: int, img: str) -> bool:
+        """
+        Updates the profile picture of the user with the given id.
+        Returns if the user exists.
+        """
+        if self.fetch_picture(user_id) is None:
+            return False
+
+        self.cur.execute("""
+            UPDATE users
+               SET profile_picture = ?
+             WHERE id = ?""", (img, user_id))
+
+        self.db.commit()
+
+        return True
+
+
+    def fetch_picture(self, user_id) -> str:
+        """
+        Returns the profile picture of the user with the given id.
+        """
+        self.cur.execute("SELECT profile_picture FROM users WHERE id = ?", (user_id,))
+        img = index_nullable(self.cur.fetchone(), 0)
+
+        return img
 
 
 def index_nullable(nullable, index: int):

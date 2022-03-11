@@ -68,6 +68,18 @@ class Battleship:
 				raise ValueError(f"The ship placement is invalid because part or all of the ship is off the board.\nLocation:{location} | Game:{game} | Vertical:{vertical} | Length:{length}")
 
 		def hit(self, location:tuple) -> bool:
+			"""
+			Tells you if you've hit a location or not. If you do, it also marks the hit on the ship itself.
+
+			Parameters
+			----------
+			location : tuple
+				(x, y) of where you're trying to hit
+
+			Returns
+			-------
+			A boolean if you hit something.
+			"""
 			if location in self.hits:
 				self.hits[location] = True
 				return True
@@ -75,9 +87,19 @@ class Battleship:
 				return False
 
 		def get_locations(self) -> list:
+			"""
+			Returns
+			-------
+			A list of locations where the ship is located.
+			"""
 			return list(self.hits.keys())
 
 		def sunk(self) -> bool:
+			"""
+			Returns
+			-------
+			If all the ship sections have been sunk.
+			"""
 			if False not in self.hits.values():
 				return True
 			else:
@@ -86,10 +108,15 @@ class Battleship:
 		def __str__(self):
 			return f"Length: {length} | Location: {location} | Vertical: {vertical} | Player: {player}"
 
-	def __new_ship__(self, location:tuple, vertical:bool, length:int, player:int) -> Ship:
-		return self.Ship(self, location, vertical, length, player)
-
 	def __randomize_ship_placement__(self, player:int = 1):
+		"""
+		Fills a playerboard with all the ships needed.
+
+		Parameters
+		----------
+		player : int
+			Which player's board are we updating?
+		"""
 		for size in self.ship_sizes:
 			location = (random.randint(0, self.width), random.randint(0, self.height))
 			vertical = (random.randint(0, 1) == 1)
@@ -97,7 +124,7 @@ class Battleship:
 
 			while ship == None:
 				try:
-					ship = self.__new_ship__(location, vertical, size, player)
+					ship = self.Ship(self, location, vertical, size, player)
 				except ValueError as e:
 					debug_print(e)
 					location = (random.randint(0, self.width), random.randint(0, self.height))
@@ -106,6 +133,14 @@ class Battleship:
 			self.players[player].append(ship)
 
 	def __init__(self, height:int=7, width:int=7):
+		"""
+		Parameters
+		----------
+		height : int
+			number of rows in the board (max y)
+		width : int
+			number of rows in the board (max x)
+		"""
 		# the board stats
 		self.height = height
 		self.width = width
@@ -120,18 +155,23 @@ class Battleship:
 
 		self.__randomize_ship_placement__()
 
+	def return_board_as_array(self, player:int) -> list:
+		board = [[0 for y in range(self.width)] for x in range(self.height)]
+
+		for ship in self.players[player]:
+			locations = ship.get_locations()
+
+			for location in locations:
+				board[location[1]][location[0]] = ship.length
+
+		return board
+	
 	def __str__(self) -> str:
 		string = ""
 
-		for player, ships in self.players.items():
+		for player in self.players:
 			string += f"{player}:\n"
-			board = [[0 for i in range(self.width)] for i in range(self.height)]
-
-			for ship in ships:
-				locations = ship.get_locations()
-
-				for location in locations:
-					board[location[1]][location[0]] = len(locations)
+			board = self.return_board_as_array(player)
 
 			for row in board:
 				string += f"{row}\n"

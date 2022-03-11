@@ -29,3 +29,11 @@ Further testing is needed.
 rengZ - 2022-03-09 08:34
  - Refactored code to more efficient method (some naive solutions there because it would cost more engineering time than it would benefit from)
  - TODO: Test code
+
+rengZ - 2022-03-10 08:39
+ - Refactor tested, works. Created unit test for unit test
+
+wenhaoD -- 2022-03-10 08:36
+Added tests for database.py.
+Fixed fetch_user and fetch_username not returning a non-tuple value.
+Implemented profile_picture column to users table and a set/fetch function for it.
