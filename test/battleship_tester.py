@@ -29,4 +29,4 @@ def check_board_gen(tests:int = 100) -> bool:
 
 		return True
 
-print("Board Gen: " + check_board_gen())
+print("Board Gen: " + str(check_board_gen()))
