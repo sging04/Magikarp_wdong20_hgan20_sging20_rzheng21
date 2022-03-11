@@ -34,7 +34,7 @@ class Battleship:
 						return False
 
 			for location in self.hits.keys():
-				if (location[0] >= game.width or location[0] < 0) or (location[1] >= game.height or location[0] < 0):
+				if game.not_in_board(location):
 					return False
 
 			return True
@@ -166,9 +166,24 @@ class Battleship:
 			locations = ship.get_locations()
 
 			for location in locations:
+				debug_print(locations)
 				board[location[1]][location[0]] = ship.length
 
 		return board
+
+	def not_in_board(self, location:tuple) -> bool:
+		"""
+		Parameters
+		----------
+		location : tuple
+			(x, y) of location being checked
+
+		Returns
+		-------
+		Whether or not the location is in the board.
+		"""
+		return (location[0] >= self.width or location[0] < 0) or (location[1] >= self.height or location[1] < 0)
+
 
 	def attack(self, player:int, location:tuple):
 		"""
