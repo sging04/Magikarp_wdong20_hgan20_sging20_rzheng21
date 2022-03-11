@@ -17,7 +17,7 @@ and once again clarify that the user profile includes both the player's ongoing 
 
 Moved the ship date to a later date, since once group suggested we do that.
 
-rengZ - 2022-03-08 08:34
+rengZ -- 2022-03-08 08:34
  - Began boilerplate for the game session and the necessary information
  - Encountered bugs, currently working on a more efficient implementation of the board
 
@@ -26,14 +26,20 @@ Started work on a database.py file.
 Only simple login and register is set up.
 Further testing is needed.
 
-rengZ - 2022-03-09 08:34
+rengZ -- 2022-03-09 08:34
  - Refactored code to more efficient method (some naive solutions there because it would cost more engineering time than it would benefit from)
  - TODO: Test code
 
-rengZ - 2022-03-10 08:39
+rengZ -- 2022-03-10 08:39
  - Refactor tested, works. Created unit test for unit test
 
 wenhaoD -- 2022-03-10 08:36
 Added tests for database.py.
 Fixed fetch_user and fetch_username not returning a non-tuple value.
 Implemented profile_picture column to users table and a set/fetch function for it.
+
+wenhaoD -- 2022-03-11 08:36
+Added simple register and login pages that communicates with database.
+
+rengZ - 2022-03-11 08:37
+ -  Working on getting hits online. Creating the infrastructure needed to debug to make sure nothing blows up. Is fun, not implemented yet. Needs a lot more testing.
