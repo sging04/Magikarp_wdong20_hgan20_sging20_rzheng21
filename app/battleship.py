@@ -240,5 +240,3 @@ class Battleship:
 
 			string += '*' * self.width * 3
 		return string
-
-print(Battleship())

@@ -6,6 +6,11 @@ sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__)))+ "/app")
 #imports from ../app/battleship.py
 from app.battleship import Battleship
+import random
+# seeds battleship
+Battleship.random = random
+
+print(Battleship())
 
 def check_board_gen(tests:int = 100) -> bool:
 	"""
@@ -21,12 +26,13 @@ def check_board_gen(tests:int = 100) -> bool:
 
 	for i in range(tests):
 		game = Battleship()
+		# print(game)
 		board = str(game.return_board_as_array(1)) # gets board for the AI
 
 		for ship, segments in expected_ships.items():
 			if board.count(str(ship)) != segments:
 				return False
 
-		return True
+	return True
 
 print("Board Gen: " + str(check_board_gen()))
