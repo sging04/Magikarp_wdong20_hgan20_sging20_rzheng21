@@ -7,6 +7,10 @@ app = Flask(__name__)
 def home():
     return "Ah"
 
+@app.route("/battleship")
+def battleship():
+    return render_template("battleship.html")
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == 'GET':
