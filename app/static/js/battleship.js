@@ -131,7 +131,13 @@ class SinglePlayerGame {
 
   playerTurnFinishedHandler() {
     if (this.board0.canGameStart && this.board1.canGameStart) {
-      this.currentPlayer = this.currentPlayer === 0 ? 1 : 0;
+      this.renderBoard(
+        this.currentPlayer,
+        this.currentPlayerGridElement,
+        this.currentPlayerBoard,
+        true
+      );
+      this.currentPlayer = this.opponentPlayer;
       if (this.board1.allSunk) {
         console.log("Player 1 Wins!");
       }
@@ -140,6 +146,12 @@ class SinglePlayerGame {
       }
     }
     if (this.board0.canGameStart && !this.board1.canGameStart) {
+      this.renderBoard(
+        this.currentPlayer,
+        this.currentPlayerGridElement,
+        this.currentPlayerBoard,
+        true
+      );
       this.currentPlayer = 1;
       this.renderBoard(
         this.currentPlayer,
@@ -162,7 +174,8 @@ class SinglePlayerGame {
         this.renderBoard(
           this.opponentPlayer,
           this.opponentPlayerGridElement,
-          this.opponentPlayerBoard
+          this.opponentPlayerBoard,
+          true
         );
         this.playerTurnFinishedHandler();
       }
@@ -178,15 +191,16 @@ class SinglePlayerGame {
       );
       if (viable_squares.length === 0) return;
       this.currentPlayerBoard.placeShip(row, col, shipLength, this.vertical);
-      for (let [row, col] of viable_squares) {
-        this.getBoardElement(row, col, this.currentPlayer).style =
-          "background-color: black;";
-      }
+      this.renderBoard(
+        this.currentPlayer,
+        this.currentPlayerGridElement,
+        this.currentPlayerBoard
+      );
 
       this.playerTurnFinishedHandler();
     }
   }
-  renderBoard(player, gridElement, board) {
+  renderBoard(player, gridElement, board, hideShips) {
     while (gridElement.firstChild)
       gridElement.removeChild(gridElement.lastChild); //Clear the board
     for (let i = 0; i < board_size; i++) {
@@ -210,7 +224,7 @@ class SinglePlayerGame {
             node.style = "background-color: red;";
           }
           if (typeof boardValue === "object" && !boardValue.sunk) {
-            node.style = "background-color: black;";
+            if (!hideShips) node.style = "background-color: purple;";
           }
           node.addEventListener("mouseleave", (e) => {
             this.mouseLeaveHandler(e.target, gridElement);
