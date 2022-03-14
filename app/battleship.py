@@ -219,6 +219,8 @@ class Battleship:
 			raise ValueError(f"{location} is off the board")
 		elif player == self.current_player:
 			raise ValueError(f"Current player {self.current_player} is the same as attacked player {player}.")
+		elif self.players[self.current_player]["hits board"][location[1]][location[0]] != 0:
+			raise ValueError(f"Current palyer {self.current_player} has already attacked {location}.")
 		else:
 			for ship in self.players[player]["ships"]:
 				if ship.hit(location):

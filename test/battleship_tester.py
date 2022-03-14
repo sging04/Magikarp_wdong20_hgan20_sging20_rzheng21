@@ -58,7 +58,7 @@ def check_ship_hits(tests:int = 100) -> bool:
 					print(f"Game: {game} | Location : ({x}, {y})")
 					return False
 
-				game.attack(0, (0, 0)) # just to pass the turn back
+				game.attack(0, (x, y)) # just to pass the turn back
 		# print(f"pass{i} | Game: {game}")
 	return True
 
