@@ -44,5 +44,14 @@ Added simple register and login pages that communicates with database.
 rengZ -- 2022-03-11 08:37
  -  Working on getting hits online. Creating the infrastructure needed to debug to make sure nothing blows up. Is fun, not implemented yet. Needs a lot more testing.
 
-rengZ -- 2022-03-11 08:32
+haotianG 2022-03-13 1:43
+ - Singleplayer "Pass and Play" basically works (please see battleship.html and /static/js/battleship.js)
+ - To Do: Save state of the game into the database on each move
+ - To Do: A way to restore the game using the database's data
+ - To Do: Add a button underneath each board for hiding the battleship pieces (since both players are using the same screen) and headers that notify players when they have won
+
+wenhaoD 2022-03-14 08:18
+Finalized login/logout mechanism.
+
+rengZ -- 2022-03-14 08:32
  - Hits working, time to work on sinking. All edge cases seem to be covered (or at least the ones that could be thought up by the brief QA testing phase)

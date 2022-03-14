@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      * {
+        padding: 0%;
+        margin: 0%;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      .grid1,
+      .grid2 {
+        display: grid;
+
+        background: lightblue;
+
+        flex: 1 1 0;
+        aspect-ratio: 1;
+        border: solid 1px red;
+      }
+      .grid1 > div,
+      .grid2 > div {
+        border: 0.5px solid black;
+      }
+      .container {
+        background-color: antiquewhite;
+
+        width: 100%;
+
+        margin: 0 auto;
+        display: flex;
+        align-items: flex-start;
+        justify-content: start;
+      }
+      .outerContainer {
+        min-height: 100vh;
+      }
+      .title {
+        text-align: center;
+      }
+      .widthContainer {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .users {
+        display: flex;
+        justify-content: space-around;
+      }
+      .users > div {
+        display: flex;
+        align-items: center;
+        padding-top: 10px;
+      }
+      .users > div > img {
+        border-radius: 9999px;
+      }
+      .users > div > span {
+        margin: 0 0 0 13px;
+      }
+    </style>
+    <section class="outerContainer">
+      <h1 class="title">Battleship</h1>
+      <div class="widthContainer">
+        <div class="container">
+          <div class="grid1" id="grid1"></div>
+          <div class="grid2" id="grid2"></div>
+        </div>
+        <div class="users">
+          <div>
+            <img
+              src="/static/defaultProfilePicture.jpg"
+              width="40px"
+              height="40px"
+            />
+            <span>Player One</span>
+          </div>
+          <div>
+            <img
+              src="/static/defaultProfilePicture.jpg"
+              width="40px"
+              height="40px"
+            />
+            <span>Player Two</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="/static/js/battleship.js"></script>
+  </body>
+</html>

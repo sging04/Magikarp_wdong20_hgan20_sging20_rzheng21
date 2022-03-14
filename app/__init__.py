@@ -3,9 +3,27 @@ from database import Database
 
 app = Flask(__name__)
 
+def is_logged_in():
+    return "user_id" in session
+
+# This is a decorator for routes that require the user to be logged in
+def requires_login(fn):
+    def new_fn(*args):
+        if not is_logged_in():
+            return redirect(url_for("login", error="You must be logged in!"))
+
+        return fn(*args)
+
+    return new_fn
+
 @app.route("/")
+@requires_login
 def home():
-    return "Ah"
+    return session["username"]
+
+@app.route("/battleship")
+def battleship():
+    return render_template("battleship.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -45,9 +63,18 @@ def login():
         if user_id is None:
             return redirect(url_for("login", error="Incorrect credentials"))
 
-        # TODO: update session to reflect log in
+        session["user_id"] = user_id
+        session["username"] = user
 
         return redirect("/")
 
+@app.route("/logout")
+def logout():
+    if is_logged_in():
+        session.pop("user_id")
+        session.pop("username")
+    return redirect("/login")
+
 if __name__ == "__main__":
+    app.secret_key = "foo"
     app.run(debug=True)
