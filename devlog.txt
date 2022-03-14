@@ -55,3 +55,6 @@ Finalized login/logout mechanism.
 
 rengZ -- 2022-03-14 08:32
  - Hits working, time to work on sinking. All edge cases seem to be covered (or at least the ones that could be thought up by the brief QA testing phase)
+
+wenhaoD 2022-03-14 08:41
+Started work on styling.
