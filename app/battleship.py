@@ -216,7 +216,7 @@ class Battleship:
 		else:
 			for ship in ships:
 				if ship.hit(location):
-					self.players[self.current_player]["hits board"] = 0
+					self.players[self.current_player]["hits board"] = 1
 					return
 
 			self.players[self.current_player]["hits board"] = -1
