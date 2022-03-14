@@ -62,5 +62,18 @@ def check_ship_hits(tests:int = 100) -> bool:
 		# print(f"pass{i} | Game: {game}")
 	return True
 
+def check_ship_sinks(test:int = 100) -> bool:
+	"""
+	Tests hitting ships, and sinks.
+	"""
+
+	for i in range(tests):
+		game = Battleship()
+
+		board = game.return_board_as_array(1)
+
+		for x in range(len(board)):
+			pass
+
 print("Board Gen: " + str(check_board_gen()))
 print("Hits: " + str(check_ship_hits()))
