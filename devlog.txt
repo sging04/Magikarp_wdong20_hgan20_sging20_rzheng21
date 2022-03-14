@@ -41,5 +41,8 @@ Implemented profile_picture column to users table and a set/fetch function for i
 wenhaoD -- 2022-03-11 08:36
 Added simple register and login pages that communicates with database.
 
-rengZ - 2022-03-11 08:37
+rengZ -- 2022-03-11 08:37
  -  Working on getting hits online. Creating the infrastructure needed to debug to make sure nothing blows up. Is fun, not implemented yet. Needs a lot more testing.
+
+rengZ -- 2022-03-11 08:32
+ - Hits working, time to work on sinking. All edge cases seem to be covered (or at least the ones that could be thought up by the brief QA testing phase)
