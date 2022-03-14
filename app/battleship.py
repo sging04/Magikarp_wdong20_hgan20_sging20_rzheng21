@@ -219,6 +219,7 @@ class Battleship:
 			for ship in self.players[player]["ships"]:
 				if ship.hit(location):
 					self.players[self.current_player]["hits board"][location[1]][location[0]] = 1
+					self.advance_turn()
 					return
 
 			self.players[self.current_player]["hits board"][location[1]][location[0]] = -1
