@@ -52,7 +52,7 @@ def check_ship_hits(tests:int = 100) -> bool:
 
 				game.attack(1, (x, y))
 
-				if not ((game.players[1]["hits board"][y][x] == -1 and not hit_status) or (game.players[1]["hits board"][y][x] == 1 and hit_status)):
+				if not ((game.players[0]["hits board"][y][x] == -1 and not hit_status) or (game.players[0]["hits board"][y][x] == 1 and hit_status)):
 					print(f"Game: {game} | Location : ({x}, {y})")
 					return False
 
