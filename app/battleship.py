@@ -238,7 +238,7 @@ class Battleship:
 			string += "Hits\n----\n"
 			for row in self.players[player]["hits board"]:
 				# not shot at is '*', hits are '@', misses are '#'
-				string += f"{row}\n".replace('0', '*').replace('1', '@').replace('-1', '#')
+				string += f"{row}\n".replace('0', '*').replace('-1', '#').replace('1', '#')
 
 			string += '*' * self.width * 3
 		return string
