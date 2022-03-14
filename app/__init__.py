@@ -6,11 +6,20 @@ app = Flask(__name__)
 def is_logged_in():
     return "user_id" in session
 
+# This is a decorator for routes that require the user to be logged in
+def requires_login(fn):
+    def new_fn(*args):
+        if not is_logged_in():
+            return redirect(url_for("login", error="You must be logged in!"))
+
+        return fn(*args)
+
+    return new_fn
+
 @app.route("/")
+@requires_login
 def home():
-    if is_logged_in():
-        return session["username"]
-    return "Ah"
+    return session["username"]
 
 @app.route("/battleship")
 def battleship():
