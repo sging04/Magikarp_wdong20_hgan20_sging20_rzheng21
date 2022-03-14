@@ -1,0 +1,27 @@
+{# The base template for the pages #}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %} {% endblock %}</title>
+  </head>
+  <body>
+    <nav>
+      <div>
+        <a href="/" id="home">Battleship</a>
+      </div>
+      {% if user is defined %}
+      <div>
+        {% if user is not none %}
+        <a id="user">Hello there, {{user}}!</a>
+        <a id="logout" href="/logout">Logout</a>
+        {% else %}
+        <a id="login" href="/login">Login</a>
+        <a id="signup" href="/register">Signup</a>
+        {% endif %}
+      </div>
+      {% endif %}
+    </nav>
+    <main>{% block body %} {% endblock %}</main>
+  </body>
+</html>

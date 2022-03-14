@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Register</title>
-  </head>
-  <body>
-    <form action="/register" method="post">
-      {% if error is not none %}
-      <span> {{ error }} </span>
-      {% endif %}
-      <input type="text" name="username" id="username" required />
-      <input type="password" name="password" id="password" required />
-      <button type="submit">awwawwawawawawwaawaw</button>
-    </form>
-  </body>
-</html>
+{% extends "base.html" %}
+
+{% block title %} Register {% endblock %}
+
+{% block body %}
+  <form action="/register" method="post">
+    {% if error is not none %}
+    <span> {{ error }} </span>
+    {% endif %}
+    <input type="text" name="username" id="username" required />
+    <input type="password" name="password" id="password" required />
+    <button type="submit">Signup</button>
+  </form>
+  <a href="/login">Login</a>
+{% endblock %}
