@@ -54,7 +54,9 @@ def check_ship_hits(tests:int = 100) -> bool:
 
 				if not ((game.players[1]["hits board"][y][x] == -1 and not hit_status) or (game.players[1]["hits board"][y][x] == 1 and hit_status)):
 					print(f"Game: {game} | Location : ({x}, {y})")
+					return False
 
+				game.attack(0, (0, 0)) # just to pass the turn back
 		print(f"pass{i}")
 	return True
 
