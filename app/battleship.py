@@ -199,7 +199,7 @@ class Battleship:
 		self.current_player += 1
 		self.current_player %= len(self.players)
 
-	def attack(self, player:int, location:tuple):
+	def attack(self, player:int, location:tuple) -> bool:
 		"""
 		Changes hit board and ships hit status based on attacks.
 
@@ -209,6 +209,10 @@ class Battleship:
 			The player being attacked
 		location : tuple
 			(x, y) of where you're hitting
+
+		Returns
+		-------
+		If any ship was sunk this turn.
 		"""
 		if self.not_in_board(location):
 			# checks if the hit is in the board
@@ -220,11 +224,13 @@ class Battleship:
 				if ship.hit(location):
 					self.players[self.current_player]["hits board"][location[1]][location[0]] = 1
 					self.advance_turn()
-					return
+
+					return ship.sunk()
 
 			self.players[self.current_player]["hits board"][location[1]][location[0]] = -1
 
 		self.advance_turn()
+		return False
 
 	def __str__(self) -> str:
 		string = ""
