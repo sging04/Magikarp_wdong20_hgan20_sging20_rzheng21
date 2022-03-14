@@ -213,6 +213,8 @@ class Battleship:
 		if self.not_in_board(location):
 			# checks if the hit is in the board
 			raise ValueError(f"{location} is off the board")
+		elif player == self.current_player:
+			raise ValueError(f"Current player {self.current_player} is the same as attacked player {player}.")
 		else:
 			for ship in self.players[player]["ships"]:
 				if ship.hit(location):
