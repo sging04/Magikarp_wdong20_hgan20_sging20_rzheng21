@@ -214,7 +214,7 @@ class Battleship:
 			# checks if the hit is in the board
 			raise ValueError(f"{location} is off the board")
 		else:
-			for ship in ships:
+			for ship in self.players[player]["ships"]:
 				if ship.hit(location):
 					self.players[self.current_player]["hits board"] = 1
 					return
