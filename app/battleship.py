@@ -213,13 +213,16 @@ class Battleship:
 		if self.not_in_board(location):
 			# checks if the hit is in the board
 			raise ValueError(f"{location} is off the board")
+		elif player == self.current_player:
+			raise ValueError(f"Current player {self.current_player} is the same as attacked player {player}.")
 		else:
-			for ship in ships:
+			for ship in self.players[player]["ships"]:
 				if ship.hit(location):
-					self.players[self.current_player]["hits board"] = 0
+					self.players[self.current_player]["hits board"][location[1]][location[0]] = 1
+					self.advance_turn()
 					return
 
-			self.players[self.current_player]["hits board"] = -1
+			self.players[self.current_player]["hits board"][location[1]][location[0]] = -1
 
 		self.advance_turn()
 
@@ -236,9 +239,7 @@ class Battleship:
 			string += "Hits\n----\n"
 			for row in self.players[player]["hits board"]:
 				# not shot at is '*', hits are '@', misses are '#'
-				string += f"{row}\n".replace('0', '*').replace('1', '@').replace('-1', '#')
+				string += f"{row}\n" .replace('0', '*').replace('-1', '#').replace('1', '@')
 
 			string += '*' * self.width * 3
 		return string
-
-print(Battleship())
