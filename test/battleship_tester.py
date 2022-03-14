@@ -57,7 +57,7 @@ def check_ship_hits(tests:int = 100) -> bool:
 					return False
 
 				game.attack(0, (0, 0)) # just to pass the turn back
-		print(f"pass{i}")
+		print(f"pass{i} | Game: {game}")
 	return True
 
 print("Board Gen: " + str(check_board_gen()))
