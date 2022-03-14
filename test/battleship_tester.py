@@ -16,7 +16,6 @@ def check_board_gen(tests:int = 100) -> bool:
 	"""
 	Tests the AI board generation. Gets collisions as well, making sure there's no overlap.
 	"""
-	tests = 100
 	expected_ships = {
 		2 : 2,
 		3 : 6,
@@ -33,6 +32,30 @@ def check_board_gen(tests:int = 100) -> bool:
 			if board.count(str(ship)) != segments:
 				return False
 
+		print(f"Pass {i}")
+
+	return True
+
+def check_ship_hits(test:int = 100) -> bool:
+	"""
+	Tests hitting ships, and misses.
+	"""
+
+	for i in range(tests):
+		game = Battleship()
+
+		board = game.return_board_as_array(1)
+
+		for x in range(len(board)):
+			for y in range(len(board[1])):
+				hit_status = board[y][x] != 0
+
+				game.attack(1, (x, y))
+
+				if not ((game.players[1]["hits board"][y][x] == -1 and not hit_status) or (game.players[1]["hits board"][y][x] == 1 and hit_status)):
+					print(f"Game: {game} | Location : {location}")
+
+		print(f"pass{i}")
 	return True
 
 print("Board Gen: " + str(check_board_gen()))
