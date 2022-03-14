@@ -32,11 +32,11 @@ def check_board_gen(tests:int = 100) -> bool:
 			if board.count(str(ship)) != segments:
 				return False
 
-		print(f"Pass {i}")
+		# print(f"Pass {i}")
 
 	return True
 
-def check_ship_hits(test:int = 100) -> bool:
+def check_ship_hits(tests:int = 100) -> bool:
 	"""
 	Tests hitting ships, and misses.
 	"""
@@ -59,3 +59,4 @@ def check_ship_hits(test:int = 100) -> bool:
 	return True
 
 print("Board Gen: " + str(check_board_gen()))
+print("Hits: " + str(check_ship_hits()))
