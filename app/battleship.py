@@ -135,7 +135,7 @@ class Battleship:
 			# adds valid ship to player ships when created
 			self.players[player]["ships"].append(ship)
 
-	def __init__(self, height:int=7, width:int=7):
+	def __init__(self, height:int=7, width:int=7, DEBUG:bool = False):
 		"""
 		Parameters
 		----------
@@ -143,7 +143,11 @@ class Battleship:
 			number of rows in the board (max y)
 		width : int
 			number of rows in the board (max x)
+		DEBUG : bool
+			whether or not AI move
 		"""
+		# DEBUG mode
+		self.DEBUG = DEBUG
 		# the board stats
 		self.height = height
 		self.width = width
@@ -162,7 +166,7 @@ class Battleship:
 			}
 
 		for i in range(1, player_num):
-			self.players[i]["AI"] = AI()
+			self.players[i]["AI"] = AI(self)
 
 		# places random ship for the ai
 		self.__randomize_ship_placement__()
@@ -201,6 +205,10 @@ class Battleship:
 		"""
 		self.current_player += 1
 		self.current_player %= len(self.players)
+
+		if not self.DEBUG:
+			if 'AI' in self.players[self.current_player]:
+				self.players[self.current_player]["AI"].attack()
 
 	def attack(self, player:int, location:tuple) -> bool:
 		"""
@@ -257,7 +265,14 @@ class Battleship:
 
 
 class AI:
-	def __init__(self, player:int = 1, difficulty:int = 0):
+	def __init__(self, game:Battleship, player:int = 1, difficulty:int = 0):
 		self.player = player
+		self.game = game
 		if difficulty == 0:
 			self.mode = 'random'
+			self.attacked_locations = []
+
+	def attack(self):
+		if self.mode == 'random':
+			location = (random.randint(0, self.game.width - 1), random.randint(0, self.game.height - 1))
+			self.game.attack(0, location)

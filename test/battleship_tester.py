@@ -24,7 +24,7 @@ def check_board_gen(tests:int = 100) -> bool:
 	} #expected amount of each ship segment
 
 	for i in range(tests):
-		game = Battleship()
+		game = Battleship(DEBUG = True)
 		# print(game)
 		board = str(game.return_board_as_array(1)) # gets board for the AI
 
@@ -42,7 +42,7 @@ def check_ship_hits(tests:int = 100) -> bool:
 	"""
 
 	for i in range(tests):
-		game = Battleship()
+		game = Battleship(DEBUG = True)
 
 		board = game.return_board_as_array(1)
 
@@ -68,7 +68,7 @@ def check_ship_sinks(tests:int = 100) -> bool:
 	"""
 
 	for i in range(tests):
-		game = Battleship()
+		game = Battleship(DEBUG = True)
 
 		board = game.return_board_as_array(1)
 
