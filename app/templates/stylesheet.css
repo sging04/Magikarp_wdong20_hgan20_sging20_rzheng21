@@ -1,0 +1,10 @@
+body {
+	background-image: url("/static/battleship.jpg");
+	background-repeat: round;
+}
+
+
+outer_wrapper {
+	display : flex;
+	flex-direction: column;
+}

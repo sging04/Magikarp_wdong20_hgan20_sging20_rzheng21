@@ -3,13 +3,30 @@
 {% block title %} Login {% endblock %}
 
 {% block body %}
-  <form action="/login" method="post">
+<form method="post">
+  <fieldset class="form-container dyn-small shadow">
+    <legend> Enter your username and password </legend>
     {% if error is not none %}
-    <span> {{ error }} </span>
+      <p style="color:red;">{{ error }}</p>
     {% endif %}
-    <input type="text" name="username" id="username" required />
-    <input type="password" name="password" id="password" required />
-    <button type="submit">Login</button>
-  </form>
-  <a href="/register">Signup</a>
+    <!-- The pattern /\S+/ is regex for "no whitespace characters" -->
+    <input
+      placeholder="Username"
+      id="username"
+      name="username"
+      required
+      pattern="\S+"
+    />
+    <input
+      placeholder="Password"
+      id="password"
+      name="password"
+      type="password"
+      required
+      pattern="\S+"
+    />
+    <input type="submit" value="Login" />
+  </fieldset>
+</form>
+<a id="register" class="flex-center" href = "/register">Don't have an account? Sign up</a>
 {% endblock %}
