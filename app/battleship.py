@@ -275,4 +275,9 @@ class AI:
 	def attack(self):
 		if self.mode == 'random':
 			location = (random.randint(0, self.game.width - 1), random.randint(0, self.game.height - 1))
+
+			while location in self.attacked_locations:
+				location = (random.randint(0, self.game.width - 1), random.randint(0, self.game.height - 1))
+
 			self.game.attack(0, location)
+			self.attacked_locations.append(location)
