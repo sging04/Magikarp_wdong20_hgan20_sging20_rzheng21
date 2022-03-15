@@ -205,7 +205,7 @@ class Battleship:
 		"""
 		self.current_player += 1
 		self.current_player %= len(self.players)
-
+		# invokes AI if the player has an AI
 		if not self.DEBUG:
 			if 'AI' in self.players[self.current_player]:
 				self.players[self.current_player]["AI"].attack()
@@ -228,11 +228,11 @@ class Battleship:
 		if self.not_in_board(location):
 			# checks if the hit is in the board
 			raise ValueError(f"{location} is off the board")
-		elif player == self.current_player:
+		elif player == self.current_player: # error for self attack
 			raise ValueError(f"Current player {self.current_player} is the same as attacked player {player}.")
-		elif self.players[self.current_player]["hits board"][location[1]][location[0]] != 0:
+		elif self.players[self.current_player]["hits board"][location[1]][location[0]] != 0: # error for attacking the same square
 			raise ValueError(f"Current palyer {self.current_player} has already attacked {location}.")
-		else:
+		else: # attack is valid
 			for ship in self.players[player]["ships"]:
 				if ship.hit(location):
 					self.players[self.current_player]["hits board"][location[1]][location[0]] = 1
