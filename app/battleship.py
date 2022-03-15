@@ -135,7 +135,7 @@ class Battleship:
 			# adds valid ship to player ships when created
 			self.players[player]["ships"].append(ship)
 
-	def __init__(self, height:int=7, width:int=7):
+	def __init__(self, height:int=7, width:int=7, DEBUG:bool = False):
 		"""
 		Parameters
 		----------
@@ -143,7 +143,11 @@ class Battleship:
 			number of rows in the board (max y)
 		width : int
 			number of rows in the board (max x)
+		DEBUG : bool
+			whether or not AI move
 		"""
+		# DEBUG mode
+		self.DEBUG = DEBUG
 		# the board stats
 		self.height = height
 		self.width = width
@@ -160,6 +164,9 @@ class Battleship:
 				"ships":[],
 				"hits board":[[0 for x in range(self.width)] for y in range(self.height)]
 			}
+
+		for i in range(1, player_num):
+			self.players[i]["AI"] = AI(self)
 
 		# places random ship for the ai
 		self.__randomize_ship_placement__()
@@ -198,8 +205,12 @@ class Battleship:
 		"""
 		self.current_player += 1
 		self.current_player %= len(self.players)
+		# invokes AI if the player has an AI
+		if not self.DEBUG:
+			if 'AI' in self.players[self.current_player]:
+				self.players[self.current_player]["AI"].attack()
 
-	def attack(self, player:int, location:tuple):
+	def attack(self, player:int, location:tuple) -> bool:
 		"""
 		Changes hit board and ships hit status based on attacks.
 
@@ -209,22 +220,30 @@ class Battleship:
 			The player being attacked
 		location : tuple
 			(x, y) of where you're hitting
+
+		Returns
+		-------
+		If any ship was sunk this turn.
 		"""
 		if self.not_in_board(location):
 			# checks if the hit is in the board
 			raise ValueError(f"{location} is off the board")
-		elif player == self.current_player:
+		elif player == self.current_player: # error for self attack
 			raise ValueError(f"Current player {self.current_player} is the same as attacked player {player}.")
-		else:
+		elif self.players[self.current_player]["hits board"][location[1]][location[0]] != 0: # error for attacking the same square
+			raise ValueError(f"Current palyer {self.current_player} has already attacked {location}.")
+		else: # attack is valid
 			for ship in self.players[player]["ships"]:
 				if ship.hit(location):
 					self.players[self.current_player]["hits board"][location[1]][location[0]] = 1
 					self.advance_turn()
-					return
+
+					return ship.sunk()
 
 			self.players[self.current_player]["hits board"][location[1]][location[0]] = -1
 
 		self.advance_turn()
+		return False
 
 	def __str__(self) -> str:
 		string = ""
@@ -243,3 +262,22 @@ class Battleship:
 
 			string += '*' * self.width * 3
 		return string
+
+
+class AI:
+	def __init__(self, game:Battleship, player:int = 1, difficulty:int = 0):
+		self.player = player
+		self.game = game
+		if difficulty == 0:
+			self.mode = 'random'
+			self.attacked_locations = []
+
+	def attack(self):
+		if self.mode == 'random':
+			location = (random.randint(0, self.game.width - 1), random.randint(0, self.game.height - 1))
+
+			while location in self.attacked_locations:
+				location = (random.randint(0, self.game.width - 1), random.randint(0, self.game.height - 1))
+
+			self.game.attack(0, location)
+			self.attacked_locations.append(location)

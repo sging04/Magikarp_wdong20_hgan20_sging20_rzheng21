@@ -167,6 +167,11 @@ class SinglePlayerGame {
     if (this.gameFinished) return;
     if (this.shootingPhase) {
       if (player === this.opponentPlayer) {
+        if (
+          this.opponentPlayerBoard.array[row][col] === -1 ||
+          this.opponentPlayerBoard.array[row][col].sunk === true
+        )
+          return;
         this.opponentPlayerBoard = this.opponentPlayerBoard.shootSquare(
           row,
           col
@@ -250,6 +255,13 @@ class SinglePlayerGame {
       this.currentPlayerBoard
     );
   }
+  saveGame() {
+    return {
+      board0: this.board0.save(),
+      board1: this.board1.save(),
+      currentPlayer: this.currentPlayer,
+    };
+  }
 }
 
 class Board {
@@ -325,6 +337,15 @@ class Board {
     board_copy.shipsPlaced = JSON.parse(JSON.stringify(this.shipsPlaced));
     board_copy.shipsToPlace = JSON.parse(JSON.stringify(this.shipsToPlace));
     return board_copy;
+  }
+  load(o) {
+    this.array = o.array;
+    this.shipsPlaced = o.shipsPlaced;
+    this.shipsToPlace = o.shipsToPlace;
+    return this;
+  }
+  save() {
+    return JSON.parse(JSON.stringify(this));
   }
   placeShip(row, col, shipLength, vertical) {
     if (this.shipsToPlace.length === 0)

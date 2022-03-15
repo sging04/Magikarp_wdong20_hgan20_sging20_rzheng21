@@ -13,6 +13,11 @@ body {
 
 main {
   margin: 8px;
+  max-height: 60vh;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* ==============================================
@@ -79,7 +84,7 @@ footer {
 
   display: flex;
   flex-direction: column;
-  gap: 1.2em;
+  gap: 2.4em;
 
   border-radius: 8px;
   border-color: rgb(255, 255, 255);
@@ -130,16 +135,16 @@ textarea {
 }
 
 .dyn-small {
-  padding: 2rem;
+  padding: 4rem 2.5rem;
   width: clamp(100px, 50vw, 600px);
 }
 
 .dyn-medium {
-  padding: 2.5rem;
+  padding: 4.5rem 3rem;
   width: clamp(120px, 60vw, 1000px);
 }
 
 .dyn-large {
-  padding: 3rem 4rem;
+  padding: 4rem 5rem;
   width: clamp(200px, 75vw, 1100px);
 }
