@@ -161,6 +161,9 @@ class Battleship:
 				"hits board":[[0 for x in range(self.width)] for y in range(self.height)]
 			}
 
+		for i in range(1, player_num):
+			self.players[i]["AI"] = AI()
+
 		# places random ship for the ai
 		self.__randomize_ship_placement__()
 		# starts with player 0
@@ -251,3 +254,10 @@ class Battleship:
 
 			string += '*' * self.width * 3
 		return string
+
+
+class AI:
+	def __init__(self, player:int = 1, difficulty:int = 0):
+		self.player = player
+		if difficulty == 0:
+			self.mode = 'random'
