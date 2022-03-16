@@ -60,7 +60,7 @@ wenhaoD 2022-03-14 08:41
 Started work on styling.
 
  haotianG 2022-03-14 8:42
- - Ships now hide in Pass and Play when a player has finished placing their ships 
+ - Ships now hide in Pass and Play when a player has finished placing their ships
 rengZ -- 2022-03-15 08:09
  - Sinks get declared when an attack succeeds in sinking a ship.
 
@@ -70,3 +70,7 @@ rengZ -- 2022-03-15 08:38
  haotianG 2022-03-15 9:12
  - Pass and Play bug fixes
  - Working on getting games to save and load from save
+
+rengZ -- 2022-03-16 08:34
+ - Implemented a check for game winning
+ - Began AI testing with the necessary prequisite function
