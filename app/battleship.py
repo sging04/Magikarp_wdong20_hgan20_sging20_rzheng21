@@ -222,11 +222,12 @@ class Battleship:
 		"""
 		sunk_players = []
 		for player in self.players:
-			all_sunk = True
-			for ship in self.players[player]["ships"]:
-				all_sunk = all_sunk and ship.sunk() ## turns false if any ship is unsunk
-			if all_sunk:
-				sunk_players.append(player)
+			if not (self.DEBUG and player == 0):
+				all_sunk = True
+				for ship in self.players[player]["ships"]:
+					all_sunk = all_sunk and ship.sunk() ## turns false if any ship is unsunk
+				if all_sunk:
+					sunk_players.append(player)
 
 		if (len(self.players) - len(sunk_players)) == 1:
 			return [player for player in self.players not in sunk_players][0]
