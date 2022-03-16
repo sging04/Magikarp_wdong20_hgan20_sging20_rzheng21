@@ -11,7 +11,10 @@ import random
 Battleship.random = random
 
 print(Battleship())
-DEBUG_MODES = ('AI-off', 'TESTPLAYER')
+DEBUG_MODES = (
+	'AI-off', #AI does not make moves
+	'TESTPLAYER' # does not check player 1
+)
 
 def check_board_gen(tests:int = 100) -> bool:
 	"""
