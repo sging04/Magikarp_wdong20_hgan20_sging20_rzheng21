@@ -74,3 +74,6 @@ rengZ -- 2022-03-15 08:38
 rengZ -- 2022-03-16 08:34
  - Implemented a check for game winning
  - Began AI testing with the necessary prequisite function
+
+wenhaoD -- 2022-03-16 08:37
+Started work on profile pages.
