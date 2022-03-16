@@ -12,7 +12,7 @@ def home():
         return redirect(url_for("login", error="You must be logged in!"))
     return session["username"]
 
-@app.route("/profile/<int:id>")
+@app.route("/profile/<int:id>", methods=["GET", "POST"])
 def profile(id):
     if not is_logged_in():
         return redirect(url_for("login", error="You must be logged in!"))
