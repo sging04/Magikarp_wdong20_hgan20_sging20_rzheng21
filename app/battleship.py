@@ -172,6 +172,7 @@ class Battleship:
 		self.__randomize_ship_placement__()
 		# starts with player 0
 		self.current_player = 0
+		self.winner = -1
 
 	def return_board_as_array(self, player:int) -> list:
 		# creates an array representation of the board. goes board[y][x] like in matrix notation.
@@ -203,12 +204,34 @@ class Battleship:
 		"""
 		Changes whose turn it is.
 		"""
+		self.winner = self.check_winner()
 		self.current_player += 1
 		self.current_player %= len(self.players)
 		# invokes AI if the player has an AI
 		if not self.DEBUG:
 			if 'AI' in self.players[self.current_player]:
 				self.players[self.current_player]["AI"].attack()
+
+	def check_winner(self) -> int:
+		"""
+		Checks if there's a winner
+
+		Returns
+		-------
+		The winner
+		"""
+		sunk_players = []
+		for player in self.players:
+			all_sunk = True
+			for ship in self.players[player]["ships"]:
+				all_sunk = all_sunk and ship.sunk() ## turns false if any ship is unsunk
+			if all_sunk:
+				sunk_players.append(player)
+
+		if (len(self.players) - len(sunk_players)) == 1:
+			return [player for player in self.players not in sunk_players][0]
+		else:
+			return -1
 
 	def attack(self, player:int, location:tuple) -> bool:
 		"""
