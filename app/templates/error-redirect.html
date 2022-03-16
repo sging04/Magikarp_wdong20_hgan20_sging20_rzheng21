@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %} Whoopsies! {% endblock %}
+
+{% block body %}
+<p>Error: {{ message }}</p>
+<p>Redirecting you in a few seconds...</p>
+<script>
+  setTimeout(() => {
+    window.location.assign("{{url}}")
+  }, 3_000);
+</script>
+{% endblock %}

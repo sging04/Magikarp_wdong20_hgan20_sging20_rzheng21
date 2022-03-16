@@ -6,20 +6,30 @@ app = Flask(__name__)
 def is_logged_in():
     return "user_id" in session
 
-# This is a decorator for routes that require the user to be logged in
-def requires_login(fn):
-    def new_fn(*args):
-        if not is_logged_in():
-            return redirect(url_for("login", error="You must be logged in!"))
-
-        return fn(*args)
-
-    return new_fn
-
 @app.route("/")
-@requires_login
 def home():
+    if not is_logged_in():
+        return redirect(url_for("login", error="You must be logged in!"))
     return session["username"]
+
+@app.route("/profile/<int:id>")
+def profile(id):
+    if not is_logged_in():
+        return redirect(url_for("login", error="You must be logged in!"))
+
+    if request.method == "GET":
+        db = Database("database.db")
+        username = db.fetch_username(id)
+
+        if username is None:
+            return render_template("error-redirect.html", message="Profile not found", url=url_for("home"))
+
+        pic = db.fetch_picture(id)
+
+        return render_template("profile.html", username=username, profile_img=pic)
+
+    if request.method == "POST":
+        return request.form["avatar"]
 
 @app.route("/battleship")
 def battleship():
