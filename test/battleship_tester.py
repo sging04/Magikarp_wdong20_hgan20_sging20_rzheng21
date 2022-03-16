@@ -11,6 +11,7 @@ import random
 Battleship.random = random
 
 print(Battleship())
+DEBUG_MODES = ('AI-off', 'TESTPLAYER')
 
 def check_board_gen(tests:int = 100) -> bool:
 	"""
@@ -24,7 +25,7 @@ def check_board_gen(tests:int = 100) -> bool:
 	} #expected amount of each ship segment
 
 	for i in range(tests):
-		game = Battleship(DEBUG = True)
+		game = Battleship(DEBUG = ('TESTPLAYER', 'AI-off'))
 		# print(game)
 		board = str(game.return_board_as_array(1)) # gets board for the AI
 
@@ -42,7 +43,7 @@ def check_ship_hits(tests:int = 100) -> bool:
 	"""
 
 	for i in range(tests):
-		game = Battleship(DEBUG = True)
+		game = Battleship(DEBUG = ('TESTPLAYER', 'AI-off'))
 
 		board = game.return_board_as_array(1)
 
@@ -68,7 +69,7 @@ def check_ship_sinks(tests:int = 100) -> bool:
 	"""
 
 	for n in range(tests):
-		game = Battleship(DEBUG = True)
+		game = Battleship(DEBUG = ('TESTPLAYER', 'AI-off'))
 
 		board = game.return_board_as_array(1)
 
@@ -89,7 +90,7 @@ def check_check_winner(tests:int = 100) -> bool:
 	Tests the winner function
 	"""
 	for n in range(tests):
-		game = Battleship(DEBUG = True)
+		game = Battleship(DEBUG = ('TESTPLAYER', 'AI-off'))
 
 		board = game.return_board_as_array(1)
 

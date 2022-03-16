@@ -135,7 +135,7 @@ class Battleship:
 			# adds valid ship to player ships when created
 			self.players[player]["ships"].append(ship)
 
-	def __init__(self, height:int=7, width:int=7, DEBUG:bool = False):
+	def __init__(self, height:int=7, width:int=7, DEBUG:tuple = ()):
 		"""
 		Parameters
 		----------
@@ -208,7 +208,7 @@ class Battleship:
 		self.current_player += 1
 		self.current_player %= len(self.players)
 		# invokes AI if the player has an AI
-		if not self.DEBUG:
+		if 'AI-off' not in self.DEBUG:
 			if 'AI' in self.players[self.current_player]:
 				self.players[self.current_player]["AI"].attack()
 
@@ -222,7 +222,7 @@ class Battleship:
 		"""
 		sunk_players = []
 		for player in self.players:
-			if not (self.DEBUG and player == 0):
+			if not ('TESTPLAYER' in self.DEBUG and player == 0):
 				all_sunk = True
 				for ship in self.players[player]["ships"]:
 					all_sunk = all_sunk and ship.sunk() ## turns false if any ship is unsunk
