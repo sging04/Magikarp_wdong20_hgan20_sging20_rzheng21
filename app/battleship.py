@@ -230,7 +230,7 @@ class Battleship:
 					sunk_players.append(player)
 
 		if (len(self.players) - len(sunk_players)) == 1:
-			return [player for player in self.players not in sunk_players][0]
+			return [player for player in self.players if player not in sunk_players][0]
 		else:
 			return -1
 
