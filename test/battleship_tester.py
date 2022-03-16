@@ -83,6 +83,22 @@ def check_ship_sinks(tests:int = 100) -> bool:
 
 		# print(i, f"{game}")
 	return True
+
+
+
+def check_random_ai(tests:int = 100) -> bool:
+	"""
+	Tests the random AI
+	"""
+
+	for i in range(tests):
+		game = Battleship()
+
+		for x in range(game.width):
+			for y in range(game.length):
+				game.attack(1, (x,y))
+
 print("Board Gen: " + str(check_board_gen()))
 print("Hits: " + str(check_ship_hits()))
 print("Sinks: " + str(check_ship_sinks()))
+print("Random: " + str(check_random_ai()))
