@@ -131,7 +131,13 @@ class SinglePlayerGame {
 
   playerTurnFinishedHandler() {
     if (this.board0.canGameStart && this.board1.canGameStart) {
-      this.currentPlayer = this.currentPlayer === 0 ? 1 : 0;
+      this.renderBoard(
+        this.currentPlayer,
+        this.currentPlayerGridElement,
+        this.currentPlayerBoard,
+        true
+      );
+      this.currentPlayer = this.opponentPlayer;
       if (this.board1.allSunk) {
         console.log("Player 1 Wins!");
       }
@@ -140,6 +146,12 @@ class SinglePlayerGame {
       }
     }
     if (this.board0.canGameStart && !this.board1.canGameStart) {
+      this.renderBoard(
+        this.currentPlayer,
+        this.currentPlayerGridElement,
+        this.currentPlayerBoard,
+        true
+      );
       this.currentPlayer = 1;
       this.renderBoard(
         this.currentPlayer,
@@ -155,6 +167,11 @@ class SinglePlayerGame {
     if (this.gameFinished) return;
     if (this.shootingPhase) {
       if (player === this.opponentPlayer) {
+        if (
+          this.opponentPlayerBoard.array[row][col] === -1 ||
+          this.opponentPlayerBoard.array[row][col].sunk === true
+        )
+          return;
         this.opponentPlayerBoard = this.opponentPlayerBoard.shootSquare(
           row,
           col
@@ -162,7 +179,8 @@ class SinglePlayerGame {
         this.renderBoard(
           this.opponentPlayer,
           this.opponentPlayerGridElement,
-          this.opponentPlayerBoard
+          this.opponentPlayerBoard,
+          true
         );
         this.playerTurnFinishedHandler();
       }
@@ -178,15 +196,16 @@ class SinglePlayerGame {
       );
       if (viable_squares.length === 0) return;
       this.currentPlayerBoard.placeShip(row, col, shipLength, this.vertical);
-      for (let [row, col] of viable_squares) {
-        this.getBoardElement(row, col, this.currentPlayer).style =
-          "background-color: black;";
-      }
+      this.renderBoard(
+        this.currentPlayer,
+        this.currentPlayerGridElement,
+        this.currentPlayerBoard
+      );
 
       this.playerTurnFinishedHandler();
     }
   }
-  renderBoard(player, gridElement, board) {
+  renderBoard(player, gridElement, board, hideShips) {
     while (gridElement.firstChild)
       gridElement.removeChild(gridElement.lastChild); //Clear the board
     for (let i = 0; i < board_size; i++) {
@@ -210,7 +229,7 @@ class SinglePlayerGame {
             node.style = "background-color: red;";
           }
           if (typeof boardValue === "object" && !boardValue.sunk) {
-            node.style = "background-color: black;";
+            if (!hideShips) node.style = "background-color: purple;";
           }
           node.addEventListener("mouseleave", (e) => {
             this.mouseLeaveHandler(e.target, gridElement);
@@ -235,6 +254,13 @@ class SinglePlayerGame {
       this.currentPlayerGridElement,
       this.currentPlayerBoard
     );
+  }
+  saveGame() {
+    return {
+      board0: this.board0.save(),
+      board1: this.board1.save(),
+      currentPlayer: this.currentPlayer,
+    };
   }
 }
 
@@ -311,6 +337,15 @@ class Board {
     board_copy.shipsPlaced = JSON.parse(JSON.stringify(this.shipsPlaced));
     board_copy.shipsToPlace = JSON.parse(JSON.stringify(this.shipsToPlace));
     return board_copy;
+  }
+  load(o) {
+    this.array = o.array;
+    this.shipsPlaced = o.shipsPlaced;
+    this.shipsToPlace = o.shipsToPlace;
+    return this;
+  }
+  save() {
+    return JSON.parse(JSON.stringify(this));
   }
   placeShip(row, col, shipLength, vertical) {
     if (this.shipsToPlace.length === 0)
