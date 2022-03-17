@@ -46,7 +46,7 @@ def register():
         pwd = request.form["password"]
 
         db = Database("database.db")
-        success = db.register_user(user, pwd, url_for("static", "defaultProfilePicture.jpg"))
+        success = db.register_user(user, pwd, url_for("static", filename="defaultProfilePicture.jpg"))
         db.close()
 
         if success:
