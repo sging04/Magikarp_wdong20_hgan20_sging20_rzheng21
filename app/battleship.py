@@ -234,6 +234,11 @@ class Battleship:
 		else:
 			return -1
 
+	def get_sunk_at_location(self, player:int, location:tuple) -> bool:
+		"""
+		Checks if the ship at a given location has been sunk
+		"""
+
 	def attack(self, player:int, location:tuple) -> bool:
 		"""
 		Changes hit board and ships hit status based on attacks.
@@ -287,7 +292,6 @@ class Battleship:
 			string += '*' * self.width * 3
 		return string
 
-
 class AI:
 	def __init__(self, game:Battleship, player:int = 1, difficulty:int = 0):
 		self.player = player
@@ -305,3 +309,5 @@ class AI:
 
 			self.game.attack(0, location)
 			self.attacked_locations.append(location)
+		elif self.mode == 'hunt-target easy': # https://datagenetics.com/blog/december32011/index.html
+			pass
