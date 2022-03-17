@@ -51,13 +51,13 @@ haotianG 2022-03-13 1:43
  - To Do: Add a button underneath each board for hiding the battleship pieces (since both players are using the same screen) and headers that notify players when they have won
 
 wenhaoD 2022-03-14 08:18
-Finalized login/logout mechanism.
+ - Finalized login/logout mechanism.
 
 rengZ -- 2022-03-14 08:32
  - Hits working, time to work on sinking. All edge cases seem to be covered (or at least the ones that could be thought up by the brief QA testing phase)
 
 wenhaoD 2022-03-14 08:41
-Started work on styling.
+ - Started work on styling.
 
  haotianG 2022-03-14 8:42
  - Ships now hide in Pass and Play when a player has finished placing their ships
@@ -76,7 +76,10 @@ rengZ -- 2022-03-16 08:34
  - Began AI testing with the necessary prequisite function
 
 wenhaoD -- 2022-03-16 08:37
-Started work on profile pages.
+ - Started work on profile pages.
 
 rengZ -- 2022-03-17 08:11
  - Finished random AI checking. Seems to be working
+
+wenhaoD -- 2022-03-17 08:40
+ - Tweaked styling and added default prof pic.
