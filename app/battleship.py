@@ -135,7 +135,7 @@ class Battleship:
 			# adds valid ship to player ships when created
 			self.players[player]["ships"].append(ship)
 
-	def __init__(self, height:int=7, width:int=7, DEBUG:tuple = ()):
+	def __init__(self, height:int=10, width:int=10, DEBUG:tuple = ()):
 		"""
 		Parameters
 		----------
@@ -234,6 +234,16 @@ class Battleship:
 		else:
 			return -1
 
+	def get_sunk_at_location(self, player:int, location:tuple) -> bool:
+		"""
+		Checks if the ship at a given location has been sunk
+		"""
+		for ship in self.players[player]['ships']:
+			if location in ship.get_locations():
+				return ship.sunk()
+
+		return False
+
 	def attack(self, player:int, location:tuple) -> bool:
 		"""
 		Changes hit board and ships hit status based on attacks.
@@ -287,11 +297,11 @@ class Battleship:
 			string += '*' * self.width * 3
 		return string
 
-
 class AI:
 	def __init__(self, game:Battleship, player:int = 1, difficulty:int = 0):
 		self.player = player
 		self.game = game
+		self.status = False # False if you're hunting, True if you're targetting
 		if difficulty == 0:
 			self.mode = 'random'
 			self.attacked_locations = []
@@ -305,3 +315,5 @@ class AI:
 
 			self.game.attack(0, location)
 			self.attacked_locations.append(location)
+		elif self.mode == 'hunt-target': # https://datagenetics.com/blog/december32011/index.html
+			pass
