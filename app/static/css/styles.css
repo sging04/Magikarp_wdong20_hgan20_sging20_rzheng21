@@ -13,7 +13,7 @@ body {
 
 main {
   margin: auto;
-  margin-top: 8vh;
+  margin-top: 10vh;
   max-height: 60vh;
   display: flex;
   flex-direction: column;
@@ -84,7 +84,7 @@ footer {
 
   display: flex;
   flex-direction: column;
-  gap: clamp(1rem, 2vh, 5rem);
+  gap: clamp(1rem, 4vh, 5rem);
   justify-content: space-evenly;
 
   border-radius: 8px;
@@ -141,7 +141,6 @@ textarea {
 .dyn-small {
   padding: 3rem 2.5rem;
   width: clamp(100px, 30vw, 600px);
-  height: clamp(80px, 50vh, 400px);
 }
 
 .dyn-medium {
