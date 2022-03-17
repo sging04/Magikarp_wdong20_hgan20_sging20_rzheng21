@@ -77,3 +77,6 @@ rengZ -- 2022-03-16 08:34
 
 wenhaoD -- 2022-03-16 08:37
 Started work on profile pages.
+
+rengZ -- 2022-03-17 08:11
+ - Finished random AI checking. Seems to be working

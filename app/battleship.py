@@ -254,7 +254,7 @@ class Battleship:
 			raise ValueError(f"{location} is off the board")
 		elif player == self.current_player: # error for self attack
 			raise ValueError(f"Current player {self.current_player} is the same as attacked player {player}.")
-		elif self.players[self.current_player]["hits board"][location[1]][location[0]] != 0: # error for attacking the same square
+		elif self.players[self.current_player]["hits board"][location[1]][location[0]] != 0 and not 'DOUBLEHITS' in self.DEBUG: # error for attacking the same square
 			raise ValueError(f"Current palyer {self.current_player} has already attacked {location}.")
 		else: # attack is valid
 			for ship in self.players[player]["ships"]:
