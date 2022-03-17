@@ -126,14 +126,15 @@ def check_random_ai(tests:int = 1) -> bool:
 			for y in range(game.height):
 				if game.check_winner() != -1:
 					break
-				
+
 				game.attack(1, (0,0))
-				print(game)
+				# print(game) # Visual spot check: passed
 
 		if game.check_winner() == -1:
 			return False # you should've won
 
 	return True
+
 print("Board Gen: " + str(check_board_gen()))
 print("Hits: " + str(check_ship_hits()))
 print("Sinks: " + str(check_ship_sinks()))
