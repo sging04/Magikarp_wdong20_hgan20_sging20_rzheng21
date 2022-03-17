@@ -238,6 +238,11 @@ class Battleship:
 		"""
 		Checks if the ship at a given location has been sunk
 		"""
+		for ship in self.players[player]['ships']:
+			if location in ship.get_locations():
+				return ship.sunk()
+
+		return False
 
 	def attack(self, player:int, location:tuple) -> bool:
 		"""
