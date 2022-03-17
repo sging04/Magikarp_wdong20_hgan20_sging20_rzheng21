@@ -113,18 +113,27 @@ def check_check_winner(tests:int = 100) -> bool:
 
 	return True
 
-def check_random_ai(tests:int = 100) -> bool:
+def check_random_ai(tests:int = 1) -> bool:
 	"""
 	Tests the random AI
 	"""
 
 	for i in range(tests):
-		game = Battleship()
+		game = Battleship(DEBUG = ('DOUBLEHITS',))
+		game.__randomize_ship_placement__(0)
 
 		for x in range(game.width):
 			for y in range(game.height):
-				game.attack(1, (x,y))
+				if game.check_winner() != -1:
+					break
+				
+				game.attack(1, (0,0))
+				print(game)
 
+		if game.check_winner() == -1:
+			return False # you should've won
+
+	return True
 print("Board Gen: " + str(check_board_gen()))
 print("Hits: " + str(check_ship_hits()))
 print("Sinks: " + str(check_ship_sinks()))
