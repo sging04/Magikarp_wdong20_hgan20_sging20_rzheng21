@@ -40,7 +40,7 @@ class Database:
         return index_nullable(user_id, 0)
 
 
-    def register_user(self, username: str, password: str) -> bool:
+    def register_user(self, username: str, password: str, default_avatar: str = "") -> bool:
         """
         Tries to add the given username and password into the database.
         Returns False if the user already exists, True if it successfully added the user.
@@ -51,7 +51,7 @@ class Database:
         if row is not None:
             return False
 
-        self.cur.execute("""INSERT INTO users(username, password, profile_picture) VALUES(?, ?, ?)""", (username, password, ""))
+        self.cur.execute("""INSERT INTO users(username, password, profile_picture) VALUES(?, ?, ?)""", (username, password, default_avatar))
         self.db.commit()
         return True
 
