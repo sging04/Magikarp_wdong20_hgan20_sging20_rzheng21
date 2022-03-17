@@ -135,7 +135,7 @@ class Battleship:
 			# adds valid ship to player ships when created
 			self.players[player]["ships"].append(ship)
 
-	def __init__(self, height:int=7, width:int=7, DEBUG:tuple = ()):
+	def __init__(self, height:int=10, width:int=10, DEBUG:tuple = ()):
 		"""
 		Parameters
 		----------
