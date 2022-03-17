@@ -301,6 +301,7 @@ class AI:
 	def __init__(self, game:Battleship, player:int = 1, difficulty:int = 0):
 		self.player = player
 		self.game = game
+		self.status = False # False if you're hunting, True if you're targetting
 		if difficulty == 0:
 			self.mode = 'random'
 			self.attacked_locations = []
@@ -314,5 +315,5 @@ class AI:
 
 			self.game.attack(0, location)
 			self.attacked_locations.append(location)
-		elif self.mode == 'hunt-target easy': # https://datagenetics.com/blog/december32011/index.html
+		elif self.mode == 'hunt-target': # https://datagenetics.com/blog/december32011/index.html
 			pass
