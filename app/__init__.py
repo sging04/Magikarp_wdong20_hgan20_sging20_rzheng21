@@ -42,12 +42,11 @@ def register():
         return render_template("register.html", error=error)
 
     if request.method == 'POST':
-
         user = request.form["username"]
         pwd = request.form["password"]
 
         db = Database("database.db")
-        success = db.register_user(user, pwd)
+        success = db.register_user(user, pwd, url_for("static", filename="defaultProfilePicture.jpg"))
         db.close()
 
         if success:

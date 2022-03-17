@@ -12,9 +12,9 @@ body {
 }
 
 main {
-  margin: 8px;
+  margin: auto;
+  margin-top: 10vh;
   max-height: 60vh;
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -80,25 +80,29 @@ footer {
    Forms
    ============================================== */
 .form-container {
-  margin: 2rem auto;
+  margin: 1rem auto;
 
   display: flex;
   flex-direction: column;
-  gap: 2.4em;
+  gap: clamp(1rem, 4vh, 5rem);
+  justify-content: space-evenly;
 
   border-radius: 8px;
   border-color: rgb(255, 255, 255);
 }
 
+.form-container p {
+  margin: 0;
+}
+
 legend {
-  padding-bottom: 6px;
   margin: 0 auto; /* Centers the legend */
   font-size: 1.2rem;
 }
 
 .form-container input,
 textarea {
-  padding: 0.8rem;
+  padding: 1.6vh;
 
   font-family: inherit;
   font-size: 1rem;
@@ -135,8 +139,8 @@ textarea {
 }
 
 .dyn-small {
-  padding: 4rem 2.5rem;
-  width: clamp(100px, 50vw, 600px);
+  padding: 3rem 2.5rem;
+  width: clamp(100px, 30vw, 600px);
 }
 
 .dyn-medium {
