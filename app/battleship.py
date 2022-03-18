@@ -173,6 +173,8 @@ class Battleship:
 		# starts with player 0
 		self.current_player = 0
 		self.winner = -1
+		# move history recorder
+		self.move_history = [] # tuple of (player:int, location:tuple(x,y))
 
 	def return_board_as_array(self, player:int) -> list:
 		# creates an array representation of the board. goes board[y][x] like in matrix notation.
@@ -200,11 +202,19 @@ class Battleship:
 		"""
 		return (location[0] >= self.width or location[0] < 0) or (location[1] >= self.height or location[1] < 0)
 
-	def advance_turn(self):
+	def advance_turn(self, latest_player:int, last_shot:tuple):
 		"""
-		Changes whose turn it is.
+		Changes whose turn it is. And adds to latest move to history.
+
+		latest_player : int
+			the last player to make a move (who's turn are we advancing from)
+		last_shot:tuple
+			the last move they made
 		"""
+		self.move_history.append((latest_player, last_shot))
+		# checks winner
 		self.winner = self.check_winner()
+		# advances current player tracker
 		self.current_player += 1
 		self.current_player %= len(self.players)
 		# invokes AI if the player has an AI
@@ -265,19 +275,25 @@ class Battleship:
 		elif player == self.current_player: # error for self attack
 			raise ValueError(f"Current player {self.current_player} is the same as attacked player {player}.")
 		elif self.players[self.current_player]["hits board"][location[1]][location[0]] != 0 and not 'DOUBLEHITS' in self.DEBUG: # error for attacking the same square
-			raise ValueError(f"Current palyer {self.current_player} has already attacked {location}.")
+			raise ValueError(f"Current player {self.current_player} has already attacked {location}.")
 		else: # attack is valid
 			for ship in self.players[player]["ships"]:
 				if ship.hit(location):
 					self.players[self.current_player]["hits board"][location[1]][location[0]] = 1
-					self.advance_turn()
+					self.advance_turn(self.current_player, location)
 
 					return ship.sunk()
 
 			self.players[self.current_player]["hits board"][location[1]][location[0]] = -1
 
-		self.advance_turn()
+		self.advance_turn(self.current_player, location)
 		return False
+
+	def get_move_history(self) -> tuple:
+		"""
+		Returns attack history as a tuple
+		"""
+		return tuple(self.move_history)
 
 	def __str__(self) -> str:
 		string = ""
