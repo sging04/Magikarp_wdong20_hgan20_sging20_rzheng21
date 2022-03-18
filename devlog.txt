@@ -90,3 +90,7 @@ rengZ -- 2022-03-17 08:36
  haotianG 2022-03-17 12:17
  - Pass and Play bug fixes
  - Pass and Play can now load and save games
+
+wenhaoD -- 2022-03-18 08:31
+ - Added ability to change profile pictures
+   - not very secure right now because you can change *anyone's* profile picture
