@@ -52,7 +52,12 @@ class Database:
         if row is not None: #make sure user doesn't already exist
             return False
 
-        self.cur.execute("""INSERT INTO users(username, password, profile_picture, wins) VALUES(?, ?, ?, ?)""", (username, password, default_avatar, 0))
+        self.cur.execute("""
+            INSERT INTO users(
+              username,
+              password,
+              profile_picture,
+              wins ) VALUES(?, ?, ?, ?)""", (username, password, default_avatar, 0))
         self.db.commit()
         return True
 
