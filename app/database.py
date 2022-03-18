@@ -89,6 +89,12 @@ class Database:
 
         return True
 
+    # def fetchAllUsers(self):
+    #     self._cursor.execute(f'SELECT rowid,* FROM {self._name};')
+    #     return self._cursor.fetchall()    # def fetchAllUsers(self):
+    #     self._cursor.execute(f'SELECT rowid,* FROM {self._name};')
+    #     return self._cursor.fetchall()
+
 
     def fetch_picture(self, user_id) -> str:
         """
@@ -98,6 +104,7 @@ class Database:
         img = index_nullable(self.cur.fetchone(), 0)
 
         return img
+
     def add_win(self, user_id) -> int:
         self.cur.execute("SELECT user FROM users WHERE id = ?", (user_id,))
         wins = index_nullable(self.cur.fetchone(), 0)
@@ -107,7 +114,12 @@ class Database:
                SET wins = ?
              WHERE id = ?""", (wins, user_id))
         self.db.commit()
+        return wins
 
+    def fetch_wins(self, user_id) -> int:
+        self.cur.execute("SELECT user FROM users WHERE id = ?", (user_id,))
+        wins = index_nullable(self.cur.fetchone(), 0)
+        return wins
 
 def index_nullable(nullable, index: int):
     if nullable is not None:

@@ -35,6 +35,14 @@ def profile(id):
 def battleship():
     return render_template("battleship.html")
 
+@app.route("/home")
+def home():
+
+    db = Database("database.db")
+
+    wins = db.fetch_wins(id)
+    return render_template("index.html")
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == 'GET':
@@ -59,7 +67,7 @@ def login():
     if request.method == "GET":
         error = request.args.get("error", None)
         return render_template("login.html", error=error)
-    
+
     if request.method == "POST":
         user = request.form["username"]
         pwd = request.form["password"]
