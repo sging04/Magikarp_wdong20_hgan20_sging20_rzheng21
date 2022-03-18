@@ -29,7 +29,14 @@ def profile(id):
         return render_template("profile.html", username=username, profile_img=pic)
 
     if request.method == "POST":
-        return request.form["avatar"]
+        avatar = request.get_data().decode("utf-8")
+
+        db = Database("database.db")
+        username = db.fetch_username(id)
+        db.set_picture(id, avatar)
+        db.close()
+
+        return render_template("profile.html", username=username, profile_img=avatar)
 
 @app.route("/battleship")
 def battleship():
