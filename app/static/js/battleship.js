@@ -27,11 +27,7 @@ class SinglePlayerGame {
   }
   set vertical(newValue) {
     if (this.board0.canGameStart && this.board1.canGameStart) return;
-    this.renderBoard(
-      this.currentPlayer,
-      this.currentPlayerGridElement,
-      this.currentPlayerBoard
-    );
+    this.renderBothBoards();
     this._vertical = newValue;
     return newValue;
   }
@@ -132,14 +128,19 @@ class SinglePlayerGame {
     }
   }
 
-  playerTurnFinishedHandler() {
-    if (this.board0.canGameStart && this.board1.canGameStart) {
-      this.renderBoard(
-        this.currentPlayer,
-        this.currentPlayerGridElement,
-        this.currentPlayerBoard,
-        true
-      );
+  mouseClickHandler(htmlElement) {
+    const [, player, row, col] = htmlElement.id
+      .split("_")
+      .map((v) => Number.parseInt(v));
+    if (this.gameFinished) return;
+    if (this.shootingPhase && player === this.opponentPlayer) {
+      if (
+        this.opponentPlayerBoard.array[row][col] === -1 ||
+        this.opponentPlayerBoard.array[row][col].sunk === true
+      )
+        return;
+      this.opponentPlayerBoard = this.opponentPlayerBoard.shootSquare(row, col);
+
       this.currentPlayer = this.opponentPlayer;
       if (this.board1.allSunk) {
         console.log("Player 1 Wins!");
@@ -148,47 +149,10 @@ class SinglePlayerGame {
         console.log("Player 2 Wins!");
       }
     }
-    if (this.board0.canGameStart && !this.board1.canGameStart) {
-      this.renderBoard(
-        this.currentPlayer,
-        this.currentPlayerGridElement,
-        this.currentPlayerBoard,
-        true
-      );
-      this.currentPlayer = 1;
-      this.renderBoard(
-        this.currentPlayer,
-        this.currentPlayerGridElement,
-        this.currentPlayerBoard
-      );
-    }
-  }
-  mouseClickHandler(htmlElement) {
-    const [, player, row, col] = htmlElement.id
-      .split("_")
-      .map((v) => Number.parseInt(v));
-    if (this.gameFinished) return;
-    if (this.shootingPhase) {
-      if (player === this.opponentPlayer) {
-        if (
-          this.opponentPlayerBoard.array[row][col] === -1 ||
-          this.opponentPlayerBoard.array[row][col].sunk === true
-        )
-          return;
-        this.opponentPlayerBoard = this.opponentPlayerBoard.shootSquare(
-          row,
-          col
-        );
-        this.renderBoard(
-          this.opponentPlayer,
-          this.opponentPlayerGridElement,
-          this.opponentPlayerBoard,
-          true
-        );
-        this.playerTurnFinishedHandler();
-      }
-    }
-    if (!this.currentPlayerBoard.canGameStart) {
+    if (
+      !this.currentPlayerBoard.canGameStart &&
+      player === this.currentPlayer
+    ) {
       let shipsLeft = this.currentPlayerBoard.shipsToPlace.slice(0);
       let shipLength = shipsLeft.shift();
       let viable_squares = this.currentPlayerBoard.checkShipPlacement(
@@ -199,14 +163,15 @@ class SinglePlayerGame {
       );
       if (viable_squares.length === 0) return;
       this.currentPlayerBoard.placeShip(row, col, shipLength, this.vertical);
-      this.renderBoard(
-        this.currentPlayer,
-        this.currentPlayerGridElement,
-        this.currentPlayerBoard
-      );
-
-      this.playerTurnFinishedHandler();
+      if (this.currentPlayerBoard.shipsToPlace.length === 0)
+        this.currentPlayer = this.opponentPlayer;
     }
+
+    this.renderBothBoards();
+  }
+  renderBothBoards() {
+    this.renderBoard(0, grid0, this.board0, this.board0.canGameStart);
+    this.renderBoard(1, grid1, this.board1, this.board1.canGameStart);
   }
   renderBoard(player, gridElement, board, hideShips) {
     while (gridElement.firstChild)
@@ -246,24 +211,27 @@ class SinglePlayerGame {
         }
 
         gridElement.appendChild(node);
-        gridElement;
       }
     }
   }
-  hoverGuide() {}
   startGame() {
-    this.renderBoard(
-      this.currentPlayer,
-      this.currentPlayerGridElement,
-      this.currentPlayerBoard
-    );
+    this.renderBothBoards();
   }
-  saveGame() {
+  static saveGame(SinglePlayerGame) {
     return {
-      board0: this.board0.save(),
-      board1: this.board1.save(),
-      currentPlayer: this.currentPlayer,
+      board0: Board.save({ ...SinglePlayerGame.board0 }),
+      board1: Board.save({ ...SinglePlayerGame.board1 }),
+      currentPlayer: SinglePlayerGame.currentPlayer,
     };
+  }
+  static loadGame(o, grid1, grid2) {
+    let board0 = Board.load(o.board0);
+    let board1 = Board.load(o.board1);
+    let newGame = new SinglePlayerGame(board0, board1, grid1, grid2);
+    newGame.currentPlayer = o.currentPlayer;
+    currentGame = newGame;
+    newGame.renderBothBoards();
+    return newGame;
   }
 }
 
@@ -342,14 +310,15 @@ class Board {
     board_copy.shipsToPlace = JSON.parse(JSON.stringify(this.shipsToPlace));
     return board_copy;
   }
-  load(o) {
-    this.array = o.array;
-    this.shipsPlaced = o.shipsPlaced;
-    this.shipsToPlace = o.shipsToPlace;
-    return this;
+  static load(o) {
+    let newBoard = new Board();
+    newBoard.array = JSON.parse(JSON.stringify(o.array));
+    newBoard.shipsPlaced = JSON.parse(JSON.stringify(o.shipsPlaced));
+    newBoard.shipsToPlace = JSON.parse(JSON.stringify(o.shipsToPlace));
+    return newBoard;
   }
-  save() {
-    return JSON.parse(JSON.stringify(this));
+  static save(board) {
+    return JSON.parse(JSON.stringify(board));
   }
   placeShip(row, col, shipLength, vertical) {
     if (this.shipsToPlace.length === 0)
@@ -400,6 +369,9 @@ class Board {
 
 let currentGame = new SinglePlayerGame(new Board(), new Board(), grid0, grid1);
 document.addEventListener("keypress", (e) => {
-  if (e.key === "r") currentGame.vertical = !currentGame.vertical;
+  if (e.key === "r") {
+    console.log(currentGame);
+    currentGame.vertical = !currentGame.vertical;
+  }
 });
 currentGame.startGame();

@@ -29,11 +29,26 @@ def profile(id):
         return render_template("profile.html", username=username, profile_img=pic)
 
     if request.method == "POST":
-        return request.form["avatar"]
+        avatar = request.get_data().decode("utf-8")
+
+        db = Database("database.db")
+        username = db.fetch_username(id)
+        db.set_picture(id, avatar)
+        db.close()
+
+        return render_template("profile.html", username=username, profile_img=avatar)
 
 @app.route("/battleship")
 def battleship():
     return render_template("battleship.html")
+
+@app.route("/home")
+def home():
+
+    db = Database("database.db")
+
+    wins = db.fetch_wins(id)
+    return render_template("index.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -59,7 +74,7 @@ def login():
     if request.method == "GET":
         error = request.args.get("error", None)
         return render_template("login.html", error=error)
-    
+
     if request.method == "POST":
         user = request.form["username"]
         pwd = request.form["password"]

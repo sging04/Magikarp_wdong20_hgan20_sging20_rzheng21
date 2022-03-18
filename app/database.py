@@ -10,7 +10,8 @@ class Database:
               id INTEGER PRIMARY KEY,
               username TEXT,
               password TEXT,
-              profile_picture TEXT)""")
+              profile_picture TEXT,
+              wins INTEGER )""") #insert wins
 
         # TODO: Create database for saved games
 
@@ -48,10 +49,15 @@ class Database:
         self.cur.execute("SELECT * FROM users WHERE LOWER(username) = LOWER(?)", (username,))
         row = self.cur.fetchone()
 
-        if row is not None:
+        if row is not None: #make sure user doesn't already exist
             return False
 
-        self.cur.execute("""INSERT INTO users(username, password, profile_picture) VALUES(?, ?, ?)""", (username, password, default_avatar))
+        self.cur.execute("""
+            INSERT INTO users(
+              username,
+              password,
+              profile_picture,
+              wins ) VALUES(?, ?, ?, ?)""", (username, password, default_avatar, 0))
         self.db.commit()
         return True
 
@@ -83,6 +89,12 @@ class Database:
 
         return True
 
+    # def fetchAllUsers(self):
+    #     self._cursor.execute(f'SELECT rowid,* FROM {self._name};')
+    #     return self._cursor.fetchall()    # def fetchAllUsers(self):
+    #     self._cursor.execute(f'SELECT rowid,* FROM {self._name};')
+    #     return self._cursor.fetchall()
+
 
     def fetch_picture(self, user_id) -> str:
         """
@@ -93,6 +105,21 @@ class Database:
 
         return img
 
+    def add_win(self, user_id) -> int:
+        self.cur.execute("SELECT user FROM users WHERE id = ?", (user_id,))
+        wins = index_nullable(self.cur.fetchone(), 0)
+        wins+= 1;
+        self.cur.execute("""
+            UPDATE users
+               SET wins = ?
+             WHERE id = ?""", (wins, user_id))
+        self.db.commit()
+        return wins
+
+    def fetch_wins(self, user_id) -> int:
+        self.cur.execute("SELECT user FROM users WHERE id = ?", (user_id,))
+        wins = index_nullable(self.cur.fetchone(), 0)
+        return wins
 
 def index_nullable(nullable, index: int):
     if nullable is not None:
