@@ -6,6 +6,7 @@ sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__)))+ "/app")
 #imports from ../app/battleship.py
 from app.battleship import Battleship
+import math
 import random
 # seeds battleship
 Battleship.random = random
@@ -113,7 +114,7 @@ def check_check_winner(tests:int = 100) -> bool:
 
 	return True
 
-def check_random_ai(tests:int = 1) -> bool:
+def check_random_ai(tests:int = 100) -> bool:
 	"""
 	Tests the random AI
 	"""
@@ -135,8 +136,50 @@ def check_random_ai(tests:int = 1) -> bool:
 
 	return True
 
+def check_move_history(tests:int = 100) -> bool:
+	"""
+	Checks move history tracker
+	"""
+
+	for n in range(tests):
+		game = Battleship(DEBUG = ('AI-off'))
+		game.__randomize_ship_placement__(0)
+
+		individual_moves = {
+			0 : [],
+			1 : []
+		}
+
+
+		for x in range(game.width * game.height * 2):
+			# random move
+			location = (random.randint(0, game.width - 1), random.randint(0, game.height - 1))
+
+			while location in individual_moves[x % 2]:
+				location = (random.randint(0, game.width - 1), random.randint(0, game.height - 1))
+
+			individual_moves[x % 2].append(location)
+			game.attack((x + 1) % 2, location)
+
+		# merges individual move history for complete move history
+		history = []
+
+		game_length = sum([len(moves) for moves in individual_moves.values()])
+		for i in range(game_length):
+			player = i % len(individual_moves)
+			history.append((player, individual_moves[player][math.floor(i / len(individual_moves))]))
+
+		if tuple(history) != game.get_move_history():
+			print(history, game.get_move_history())
+			return False
+
+		print(f"{n} --------------\n{game}")
+
+	return True
+
 print("Board Gen: " + str(check_board_gen()))
 print("Hits: " + str(check_ship_hits()))
 print("Sinks: " + str(check_ship_sinks()))
 print("Check win: " + str(check_check_winner()))
 print("Random: " + str(check_random_ai()))
+print("Move history: " + str(check_move_history()))

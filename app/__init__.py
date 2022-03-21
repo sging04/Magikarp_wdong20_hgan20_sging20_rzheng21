@@ -10,7 +10,16 @@ def is_logged_in():
 def home():
     if not is_logged_in():
         return redirect(url_for("login", error="You must be logged in!"))
-    return session["username"]
+    
+    #db = Database("database.db")
+
+    return render_template("index.html")
+
+@app.route("/play")
+def play():
+    if not is_logged_in():
+        return redirect(url_for("login", error="You must be logged in!"))
+    return render_template("play.html")
 
 @app.route("/profile/<int:id>", methods=["GET", "POST"])
 def profile(id):
@@ -22,9 +31,11 @@ def profile(id):
         username = db.fetch_username(id)
 
         if username is None:
+            db.close()
             return render_template("error-redirect.html", message="Profile not found", url=url_for("home"))
 
         pic = db.fetch_picture(id)
+        db.close()
 
         return render_template("profile.html", username=username, profile_img=pic)
 
@@ -41,14 +52,6 @@ def profile(id):
 @app.route("/battleship")
 def battleship():
     return render_template("battleship.html")
-
-@app.route("/home")
-def home():
-
-    db = Database("database.db")
-
-    wins = db.fetch_wins(id)
-    return render_template("index.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

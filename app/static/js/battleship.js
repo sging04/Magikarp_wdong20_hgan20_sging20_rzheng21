@@ -12,10 +12,13 @@ const char = "abcdefghijklmnopqrstuvwxyz";
 
 class SinglePlayerGame {
   constructor(board0, board1, grid0, grid1) {
+    //corresponds to Battleship.players["ships"] on the backend
     this.board0 = board0;
     this.board1 = board1;
+    // corresponds to Battleship.players["hits board"] on the backend
     this.grid0 = grid0;
     this.grid1 = grid1;
+    // corresponds to Battleship.current_player
     this.currentPlayer = 0;
     this._vertical = false;
   }
@@ -234,6 +237,7 @@ class SinglePlayerGame {
 
 class Board {
   constructor() {
+    //corresponds to Battleship.ship_sizes on the backend
     this.shipsToPlace = [5, 4, 3, 3, 2];
     //[{shipLength, uniqueShipId, row, col, vertical}, ...]
     this.shipsPlaced = [];
