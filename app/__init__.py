@@ -10,7 +10,10 @@ def is_logged_in():
 def home():
     if not is_logged_in():
         return redirect(url_for("login", error="You must be logged in!"))
-    return session["username"]
+    
+    #db = Database("database.db")
+
+    return render_template("index.html")
 
 @app.route("/profile/<int:id>", methods=["GET", "POST"])
 def profile(id):
@@ -41,14 +44,6 @@ def profile(id):
 @app.route("/battleship")
 def battleship():
     return render_template("battleship.html")
-
-@app.route("/home")
-def home():
-
-    db = Database("database.db")
-
-    wins = db.fetch_wins(id)
-    return render_template("index.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
