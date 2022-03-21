@@ -89,11 +89,29 @@ class Database:
 
         return True
 
-    # def fetchAllUsers(self):
-    #     self._cursor.execute(f'SELECT rowid,* FROM {self._name};')
-    #     return self._cursor.fetchall()    # def fetchAllUsers(self):
-    #     self._cursor.execute(f'SELECT rowid,* FROM {self._name};')
-    #     return self._cursor.fetchall()
+
+    def fetch_all_users(self):
+        """
+        Returns a list of all users and their relevant information
+        as a list of dictionaries.
+        """
+
+        self.cur.execute("""
+            SELECT *
+            FROM   users
+        """)
+        users = self.cur.fetchall()
+
+        users_list = []
+        for id, name, _pwd, img, wins in users:
+            users_list.append({
+                "id": id,
+                "name": name,
+                "avatar": img,
+                "wins": wins,
+            })
+
+        return users_list
 
 
     def fetch_picture(self, user_id) -> str:
