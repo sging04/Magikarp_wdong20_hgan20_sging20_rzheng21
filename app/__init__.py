@@ -25,9 +25,11 @@ def profile(id):
         username = db.fetch_username(id)
 
         if username is None:
+            db.close()
             return render_template("error-redirect.html", message="Profile not found", url=url_for("home"))
 
         pic = db.fetch_picture(id)
+        db.close()
 
         return render_template("profile.html", username=username, profile_img=pic)
 
