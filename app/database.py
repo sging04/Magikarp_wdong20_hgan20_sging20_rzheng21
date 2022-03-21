@@ -1,8 +1,11 @@
 import sqlite3
+from os import path
+
+dir = str(path.dirname(__file__)) + '/'
 
 class Database:
     def __init__(self, db_file: str):
-        self.db = sqlite3.connect(db_file)
+        self.db = sqlite3.connect(dir + db_file)
         self.cur = self.db.cursor()
 
         self.cur.execute("""
