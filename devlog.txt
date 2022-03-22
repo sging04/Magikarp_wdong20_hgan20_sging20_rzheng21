@@ -102,3 +102,9 @@ rengZ -- 2022-03-18 08:41
 rengZ -- 2022-03-21 08:52
  - got the website working (mostly) on a droplet
  - modified database file to work on droplet
+
+ haotianG 2022-03-21 23:50
+ - Battleship pass and play gui improvements
+ - working on saving games to database
+ - todo: profile page
+
