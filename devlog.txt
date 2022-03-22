@@ -95,6 +95,10 @@ wenhaoD -- 2022-03-18 08:31
  - Added ability to change profile pictures
    - not very secure right now because you can change *anyone's* profile picture
 
-   rengZ -- 2022-03-18 08:41
-    - Commented backend equivalents in the frontend JS
-    - Added and tested move history
+rengZ -- 2022-03-18 08:41
+ - Commented backend equivalents in the frontend JS
+ - Added and tested move history
+
+rengZ -- 2022-03-21 08:52
+ - got the website working (mostly) on a droplet
+ - modified database file to work on droplet

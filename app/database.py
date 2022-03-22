@@ -1,8 +1,11 @@
 import sqlite3
+from os import path
+
+dir = str(path.dirname(__file__)) + '/'
 
 class Database:
     def __init__(self, db_file: str):
-        self.db = sqlite3.connect(db_file)
+        self.db = sqlite3.connect(dir + db_file)
         self.cur = self.db.cursor()
 
         self.cur.execute("""
@@ -125,11 +128,29 @@ WHERE search_condition;
 
         return True
 
-    # def fetchAllUsers(self):
-    #     self._cursor.execute(f'SELECT rowid,* FROM {self._name};')
-    #     return self._cursor.fetchall()    # def fetchAllUsers(self):
-    #     self._cursor.execute(f'SELECT rowid,* FROM {self._name};')
-    #     return self._cursor.fetchall()
+
+    def fetch_all_users(self):
+        """
+        Returns a list of all users and their relevant information
+        as a list of dictionaries.
+        """
+
+        self.cur.execute("""
+            SELECT *
+            FROM   users
+        """)
+        users = self.cur.fetchall()
+
+        users_list = []
+        for id, name, _pwd, img, wins in users:
+            users_list.append({
+                "id": id,
+                "name": name,
+                "avatar": img,
+                "wins": wins,
+            })
+
+        return users_list
 
 
     def fetch_picture(self, user_id) -> str:

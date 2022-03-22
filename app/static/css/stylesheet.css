@@ -1,10 +1,18 @@
 body {
-	background-image: url("/static/icons.png");
+	background-image: url("amogus.jpeg");
 	background-repeat: round;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo:wght@900&display=swap');
 
-outer_wrapper {
-	display : flex;
-	flex-direction: column;
+h2 {
+  font-family: 'Mr Dafoe';
+  margin: 0;
+  font-size: 5.5em;
+  margin-top: -0.6em;
+  color: white;
+  text-shadow: 0 0 0.05em #fff, 0 0 0.2em #fe05e1, 0 0 0.3em #fe05e1;
+  transform: rotate(-7deg);
+  text-align: center;
 }
