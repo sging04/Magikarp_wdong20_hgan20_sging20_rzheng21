@@ -175,7 +175,7 @@ WHERE search_condition;
         return wins
 
     def fetch_wins(self, user_id) -> int:
-        self.cur.execute("SELECT user FROM users WHERE id = ?", (user_id,))
+        self.cur.execute("SELECT wins FROM users WHERE id = ?", (user_id,))
         wins = index_nullable(self.cur.fetchone(), 0)
         return wins
 
