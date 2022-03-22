@@ -14,6 +14,13 @@ class Database:
               wins INTEGER )""") #insert wins
 
         # TODO: Create database for saved games
+        self.cur.execute("""
+            CREATE TABLE IF NOT EXISTS games(
+              game_id INTEGER PRIMARY KEY,
+              player_one_id TEXT,
+              player_two_id TEXT,
+              player_one_won INTEGER
+              game TEXT )""") 
 
         self.db.commit()
 
@@ -21,6 +28,35 @@ class Database:
     def close(self):
         self.db.close()
 
+    def add_game(self, player_one_id, player_two_id, player_one_won, game):
+        self.cur.execute("""
+            INSERT INTO games(
+              player_one_id,
+              player_two_id,
+              player_one_won,
+              game ) VALUES(?, ?, ?, ?)""", player_one_id, player_two_id, player_one_won, game)
+        self.db.commit()
+        return self.cur.lastrowid #game id
+    
+    def fetch_game(self, game_id):
+        result = self.cur.execute("""
+            SELECT game_id, player_one_id, player_two_id, player_one_won, game
+            FROM   users
+            WHERE  game_id = ?
+        """, [game_id]).fetchone()
+        return result 
+
+    def update_game(self, game_id, game, player_one_won):
+        self.cur.execute("""
+            UPDATE games
+               SET player_one_won = ?, game = ?
+             WHERE game_id = ?""", (player_one_won, game, game_id))
+
+    def delete_game(self, game_id):
+        self.cur.execute("""
+        DELETE FROM table
+WHERE search_condition;
+        """)
 
     def fetch_user(self, username: str, password: str) -> int:
         """

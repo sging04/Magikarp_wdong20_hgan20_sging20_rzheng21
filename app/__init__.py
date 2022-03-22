@@ -7,7 +7,7 @@ def is_logged_in():
     return "user_id" in session
 
 @app.route("/")
-def home():
+def index():
     if not is_logged_in():
         return redirect(url_for("login", error="You must be logged in!"))
     return session["username"]

@@ -1,5 +1,10 @@
 const grid0 = document.getElementById("grid1");
 const grid1 = document.getElementById("grid2");
+const messageBox = document.getElementById("messageBox");
+const restartGame = document.getElementById("restartGame");
+const saveGame = document.getElementById("saveGame");
+const moveForward = document.getElementById("moveForward");
+const moveBackward = document.getElementById("moveBackward");
 
 const playable_board_size = 10;
 let id = 0;
@@ -73,6 +78,7 @@ class SinglePlayerGame {
     const [, player, row, col] = htmlElement.id
       .split("_")
       .map((v) => Number.parseInt(v));
+    if (currentlyViewing !== boardHistory.length - 1) return; //move gui
     if (player != this.currentPlayer) return;
     if (!this.currentPlayerBoard.canGameStart) {
       let shipsLeft = this.currentPlayerBoard.shipsToPlace.slice(0);
@@ -103,6 +109,7 @@ class SinglePlayerGame {
     const [, player, row, col] = htmlElement.id
       .split("_")
       .map((v) => Number.parseInt(v));
+    if (currentlyViewing !== boardHistory.length - 1) return; //move gui
     if (player != this.currentPlayer) return;
     if (!this.currentPlayerBoard.canGameStart) {
       let shipsLeft = this.currentPlayerBoard.shipsToPlace.slice(0);
@@ -132,6 +139,16 @@ class SinglePlayerGame {
     const [, player, row, col] = htmlElement.id
       .split("_")
       .map((v) => Number.parseInt(v));
+    if (currentlyViewing !== boardHistory.length - 1) {
+      currentlyViewing = boardHistory.length - 1;
+      currentGame = SinglePlayerGame.loadGame(
+        boardHistory[currentlyViewing][1],
+        grid0,
+        grid1
+      );
+      currentGame.renderBothBoards();
+      return;
+    }
     if (this.gameFinished) return;
     if (this.shootingPhase && player === this.opponentPlayer) {
       if (
@@ -140,13 +157,18 @@ class SinglePlayerGame {
       )
         return;
       this.opponentPlayerBoard = this.opponentPlayerBoard.shootSquare(row, col);
+      boardHistory.push([
+        `${char[col].toUpperCase()}${row + 1}`,
+        SinglePlayerGame.saveGame(currentGame),
+      ]);
+      currentlyViewing = boardHistory.length - 1;
 
       this.currentPlayer = this.opponentPlayer;
       if (this.board1.allSunk) {
-        console.log("Player 1 Wins!");
+        this.renderBothBoards();
       }
       if (this.board0.allSunk) {
-        console.log("Player 2 Wins!");
+        this.renderBothBoards();
       }
     }
     if (
@@ -162,7 +184,13 @@ class SinglePlayerGame {
         this.vertical
       );
       if (viable_squares.length === 0) return;
+
       this.currentPlayerBoard.placeShip(row, col, shipLength, this.vertical);
+      boardHistory.push([
+        `${char[col].toUpperCase()}${row + 1}`,
+        SinglePlayerGame.saveGame(currentGame),
+      ]);
+      currentlyViewing = boardHistory.length - 1;
       if (this.currentPlayerBoard.shipsToPlace.length === 0)
         this.currentPlayer = this.opponentPlayer;
     }
@@ -172,6 +200,46 @@ class SinglePlayerGame {
   renderBothBoards() {
     this.renderBoard(0, grid0, this.board0, this.board0.canGameStart);
     this.renderBoard(1, grid1, this.board1, this.board1.canGameStart);
+    if (this.shootingPhase) {
+      if (this.currentPlayer === 0)
+        messageBox.innerHTML = `Player ${this.currentPlayer + 1}'s turn`;
+      else messageBox.innerHTML = `Player ${this.currentPlayer + 1}'s turn`;
+    } else {
+      if (this.currentPlayer === 0)
+        messageBox.innerHTML = `Player ${
+          this.currentPlayer + 1
+        } please place your ships`;
+      else
+        messageBox.innerHTML = `Player ${
+          this.currentPlayer + 1
+        } please place your ships`;
+    }
+    if (this.board1.allSunk) {
+      messageBox.innerHTML = "Player 2 Wins!";
+    }
+    if (this.board0.allSunk) {
+      messageBox.innerHTML = "Player 1 Wins!";
+    }
+
+    //Player move gui
+    let moves = document.getElementById("moves");
+    while (moves.firstChild) moves.removeChild(moves.lastChild);
+    for (let i = 0; i < boardHistory.length; i++) {
+      const node = document.createElement("div");
+      node.innerHTML = `${i + 1}. ${boardHistory[i][0]}`;
+      if (i === currentlyViewing) node.style = "background-color: yellow;";
+      node.addEventListener("click", () => {
+        currentlyViewing = i;
+        currentGame = SinglePlayerGame.loadGame(
+          boardHistory[currentlyViewing][1],
+          grid0,
+          grid1
+        );
+        currentGame.renderBothBoards();
+        return;
+      });
+      moves.appendChild(node);
+    }
   }
   renderBoard(player, gridElement, board, hideShips) {
     while (gridElement.firstChild)
@@ -367,6 +435,16 @@ class Board {
   }
 }
 
+let boardHistory = [
+  [
+    "Start",
+    SinglePlayerGame.saveGame(
+      new SinglePlayerGame(new Board(), new Board(), grid0, grid1)
+    ),
+  ],
+];
+let currentlyViewing = 0;
+
 let currentGame = new SinglePlayerGame(new Board(), new Board(), grid0, grid1);
 document.addEventListener("keypress", (e) => {
   if (e.key === "r") {
@@ -375,3 +453,56 @@ document.addEventListener("keypress", (e) => {
   }
 });
 currentGame.startGame();
+
+restartGame.addEventListener("click", () => {
+  boardHistory = [
+    [
+      "Start",
+      SinglePlayerGame.saveGame(
+        new SinglePlayerGame(new Board(), new Board(), grid0, grid1)
+      ),
+    ],
+  ];
+  currentlyViewing = 0;
+  currentGame = new SinglePlayerGame(new Board(), new Board(), grid0, grid1);
+  currentGame.startGame();
+});
+
+saveGame.addEventListener("click", () => {
+  postData("/");
+});
+
+moveForward.addEventListener("click", () => {
+  if (currentlyViewing === boardHistory.length - 1) return;
+  currentlyViewing++;
+  currentGame = SinglePlayerGame.loadGame(
+    boardHistory[currentlyViewing][1],
+    grid0,
+    grid1
+  );
+  currentGame.renderBothBoards();
+});
+
+moveBackward.addEventListener("click", () => {
+  if (currentlyViewing === 0) return;
+  currentlyViewing--;
+  currentGame = SinglePlayerGame.loadGame(
+    boardHistory[currentlyViewing][1],
+    grid0,
+    grid1
+  );
+  currentGame.renderBothBoards();
+});
+
+async function postData(url = "", data = {}) {
+  // Default options are marked with *
+  const response = await fetch(url, {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  return response.json(); // parses JSON response into native JavaScript objects
+}
