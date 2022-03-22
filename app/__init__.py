@@ -13,31 +13,28 @@ def home():
     
     #db = Database("database.db")
 
-    return render_template("index.html")
+    return render_template("index.html", user=session["username"])
 
 @app.route("/play")
 def play():
     if not is_logged_in():
         return redirect(url_for("login", error="You must be logged in!"))
-    return render_template("play.html")
+    return render_template("play.html", user=session["username"])
 
 @app.route("/profile/<int:id>", methods=["GET", "POST"])
 def profile(id):
     if not is_logged_in():
         return redirect(url_for("login", error="You must be logged in!"))
 
+    db = Database("database.db")
     if request.method == "GET":
-        db = Database("database.db")
         username = db.fetch_username(id)
 
         if username is None:
             db.close()
             return render_template("error-redirect.html", message="Profile not found", url=url_for("home"))
 
-        pic = db.fetch_picture(id)
-        db.close()
-
-        return render_template("profile.html", username=username, profile_img=pic)
+        avatar = db.fetch_picture(id)
 
     if request.method == "POST":
         avatar = request.get_data().decode("utf-8")
@@ -45,9 +42,10 @@ def profile(id):
         db = Database("database.db")
         username = db.fetch_username(id)
         db.set_picture(id, avatar)
-        db.close()
 
-        return render_template("profile.html", username=username, profile_img=avatar)
+    db.close()
+
+    return render_template("profile.html", username=username, profile_img=avatar, user=session["username"])
 
 @app.route("/battleship")
 def battleship():
