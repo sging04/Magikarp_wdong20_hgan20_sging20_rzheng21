@@ -129,7 +129,7 @@ def logout():
 
 @app.errorhandler(404)
 def error_404(e):
-    return render_template("error-redirect.html", error=e, url="/")
+    return render_template("error-redirect.html", message=e, url="/")
 
 if __name__ == "__main__":
     app.secret_key = "foo"
