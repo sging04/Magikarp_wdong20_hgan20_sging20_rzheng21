@@ -55,13 +55,14 @@ def profile(id):
         username = db.fetch_username(id)
         db.set_picture(id, avatar)
 
+    wins = db.fetch_wins(id)
     db.close()
 
     return render_template(
         "profile.html",
         username=username,  # profile username
         profile_img=avatar, # profile avatar
-        wins=":(",
+        wins=wins,          # profile wins
         user=user_data(),   # logged in user
         has_access=has_access)
 
