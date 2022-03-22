@@ -10,10 +10,11 @@ def is_logged_in():
 def index():
     if not is_logged_in():
         return redirect(url_for("login", error="You must be logged in!"))
+    db = Database("database.db")
+    users = db.fetch_all_users()
+    db.close()
 
-    #db = Database("database.db")
-
-    return render_template("index.html", user=session["username"])
+    return render_template("index.html", user=session["username"], users=users[:10])
 
 @app.route("/play")
 def play():
@@ -53,7 +54,7 @@ def battleship():
 
 @app.route("/passnplay")
 def passnplay():
-	return render_template("battleship.html")
+    return render_template("battleship.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

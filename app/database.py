@@ -133,11 +133,12 @@ WHERE search_condition;
         """
         Returns a list of all users and their relevant information
         as a list of dictionaries.
+        Orders them by the number of wins.
         """
 
         self.cur.execute("""
-            SELECT *
-            FROM   users
+            SELECT * FROM users
+            ORDER BY wins DESC
         """)
         users = self.cur.fetchall()
 
