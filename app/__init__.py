@@ -34,10 +34,7 @@ def play():
 
 @app.route("/profile/<int:id>", methods=["GET", "POST"])
 def profile(id):
-    if is_logged_in():
-        has_access = id == session["user_id"]
-    else:
-        has_access = False
+    has_access = is_logged_in() and id == session["user_id"]
 
     db = Database("database.db")
     if request.method == "GET":
