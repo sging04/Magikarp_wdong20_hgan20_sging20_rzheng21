@@ -26,6 +26,7 @@ def play():
 def profile(id):
     if not is_logged_in():
         return redirect(url_for("login", error="You must be logged in!"))
+    has_access = id == session["user_id"]
 
     db = Database("database.db")
     if request.method == "GET":
@@ -37,7 +38,7 @@ def profile(id):
 
         avatar = db.fetch_picture(id)
 
-    if request.method == "POST":
+    if request.method == "POST" and has_access: # Not a very good guard against l33t haxors but that doesn't matter right now
         avatar = request.get_data().decode("utf-8")
 
         db = Database("database.db")
@@ -46,7 +47,6 @@ def profile(id):
 
     db.close()
 
-    has_access = id == session["user_id"]
     return render_template(
         "profile.html",
         username=username,  # profile username
