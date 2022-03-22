@@ -55,15 +55,17 @@ def profile(id):
         user=session["username"], # logged in user username
         has_access=has_access)
 
-@app.route("/battleship")
-def battleship():
-    return render_template("battleship.html")
-
 @app.route("/passnplay")
 def passnplay():
     if not is_logged_in():
         return redirect(url_for("login", error="You must be logged in!"))
     return render_template("battleship.html")
+
+@app.route("/standard")
+def standard():
+    if not is_logged_in():
+        return redirect(url_for("login", error="You must be logged in!"))
+    return render_template("standard.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
