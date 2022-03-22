@@ -126,6 +126,10 @@ def logout():
         session.pop("username")
     return redirect("/login")
 
+@app.errorhandler(404)
+def error_404(e):
+    return render_template("error-redirect.html", url="/")
+
 if __name__ == "__main__":
     app.secret_key = "foo"
     app.run(debug=True)
