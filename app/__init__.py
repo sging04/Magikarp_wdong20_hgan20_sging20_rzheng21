@@ -9,17 +9,17 @@ def is_logged_in():
 def user_data():
     """
     Returns a dictionary of the user id and name.
-    Assumes is_logged_in() is True.
     """
-    return {
-        "id": session["user_id"],
-        "name": session["username"],
-    }
+    if is_logged_in():
+        return {
+            "id": session["user_id"],
+            "name": session["username"],
+        }
+    else:
+        return None # Technically don't need to return None explicitly, but here for clarity
 
 @app.route("/")
 def index():
-    if not is_logged_in():
-        return redirect(url_for("login", error="You must be logged in!"))
     db = Database("database.db")
     users = db.fetch_all_users()
     db.close()
@@ -34,9 +34,10 @@ def play():
 
 @app.route("/profile/<int:id>", methods=["GET", "POST"])
 def profile(id):
-    if not is_logged_in():
-        return redirect(url_for("login", error="You must be logged in!"))
-    has_access = id == session["user_id"]
+    if is_logged_in():
+        has_access = id == session["user_id"]
+    else:
+        has_access = False
 
     db = Database("database.db")
     if request.method == "GET":
