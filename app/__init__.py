@@ -47,7 +47,14 @@ def profile(id):
 
     db.close()
 
-    return render_template("profile.html", username=username, profile_img=avatar, user=session["username"])
+    has_access = id == session["user_id"]
+    return render_template(
+        "profile.html",
+        username=username,  # profile username
+        profile_img=avatar, # profile avatar
+        wins=":(",
+        user=session["username"], # logged in user username
+        has_access=has_access)
 
 @app.route("/battleship")
 def battleship():
