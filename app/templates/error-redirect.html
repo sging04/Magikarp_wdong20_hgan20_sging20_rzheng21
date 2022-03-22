@@ -2,6 +2,10 @@
 
 {% block title %} Whoopsies! {% endblock %}
 
+{% block head %}
+<link rel="stylesheet" href="/css/stylesheet.css">
+{% endblock %}
+
 {% block body %}
 <p>Error: {{ message }}</p>
 <p>Redirecting you in a few seconds...</p>
