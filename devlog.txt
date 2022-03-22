@@ -108,3 +108,7 @@ rengZ -- 2022-03-21 08:52
  - working on saving games to database
  - todo: profile page
 
+rengZ 2022-03-22 08:41
+ - Got passnplay up on the server
+ - Added login requirement checks to places that need it
+ - CSS changes brought in line with everything
