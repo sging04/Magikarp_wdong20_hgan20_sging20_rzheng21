@@ -5,7 +5,10 @@
     {% block head %}
     <meta charset="UTF-8" />
     <title>{% block title %} {% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
     {% endblock %}
   </head>
   <body>
@@ -16,7 +19,7 @@
       {% if user is defined %}
       <div>
         {% if user is not none %}
-        <a id="user">Hello there, {{user}}!</a>
+        <a id="user" href="/profile/{{user.id}}">Hello there, {{user.name}}!</a>
         <a id="logout" href="/logout">Logout</a>
         {% else %}
         <a id="login" href="/login">Login</a>

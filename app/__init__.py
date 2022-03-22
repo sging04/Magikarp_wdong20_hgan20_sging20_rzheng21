@@ -6,6 +6,16 @@ app = Flask(__name__)
 def is_logged_in():
     return "user_id" in session
 
+def user_data():
+    """
+    Returns a dictionary of the user id and name.
+    Assumes is_logged_in() is True.
+    """
+    return {
+        "id": session["user_id"],
+        "name": session["username"],
+    }
+
 @app.route("/")
 def index():
     if not is_logged_in():
@@ -14,13 +24,13 @@ def index():
     users = db.fetch_all_users()
     db.close()
 
-    return render_template("index.html", user=session["username"], users=users[:10])
+    return render_template("index.html", user=user_data(), users=users[:10])
 
 @app.route("/play")
 def play():
     if not is_logged_in():
         return redirect(url_for("login", error="You must be logged in!"))
-    return render_template("play.html", user=session["username"])
+    return render_template("play.html", user=user_data())
 
 @app.route("/profile/<int:id>", methods=["GET", "POST"])
 def profile(id):
@@ -52,7 +62,7 @@ def profile(id):
         username=username,  # profile username
         profile_img=avatar, # profile avatar
         wins=":(",
-        user=session["username"], # logged in user username
+        user=user_data(),   # logged in user
         has_access=has_access)
 
 @app.route("/battleship")
