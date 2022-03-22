@@ -54,7 +54,7 @@ def battleship():
 
 @app.route("/passnplay")
 def passnplay():
-	if not is_logged_in():
+    if not is_logged_in():
         return redirect(url_for("login", error="You must be logged in!"))
     return render_template("battleship.html")
 
