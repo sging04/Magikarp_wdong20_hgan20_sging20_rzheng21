@@ -3,7 +3,9 @@
 {% block title %} {{ username }}'s Profile {% endblock %}
 
 {% block body %}
+<h1>{{username}}'s Profile</h1>
 <img src="{{ profile_img }}" alt="profile picture">
+{% if has_access %}
 <form>
   <input
     type="file"
@@ -13,5 +15,7 @@
   />
   <input id="submit" type="button" value="Save Changes">
 </form>
+{% endif %}
+<h2>Wins: {{wins}}</h2>
 <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
 {% endblock %}
