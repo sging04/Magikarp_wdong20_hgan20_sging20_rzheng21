@@ -6,6 +6,8 @@ const saveGame = document.getElementById("saveGame");
 const moveForward = document.getElementById("moveForward");
 const moveBackward = document.getElementById("moveBackward");
 
+let doNotUpdateWin = false;
+
 const playable_board_size = 10;
 let id = 0;
 
@@ -139,6 +141,7 @@ class SinglePlayerGame {
     const [, player, row, col] = htmlElement.id
       .split("_")
       .map((v) => Number.parseInt(v));
+    //Board Move GUI
     if (currentlyViewing !== boardHistory.length - 1) {
       currentlyViewing = boardHistory.length - 1;
       let modifiedBoardBugFix = JSON.parse(
@@ -162,8 +165,17 @@ class SinglePlayerGame {
       currentGame.renderBothBoards();
       return;
     }
+    //Can't make any board modifications if game is finished
     if (this.gameFinished) return;
-    if (this.shootingPhase && player === this.opponentPlayer) {
+    //If ship have all been placed (shooting phase) and the opponent player's board was clicked
+    // Steps:
+    // Player makes a move
+    // setTimeout and then computer makes a move
+    if (
+      this.currentPlayer === 0 &&
+      this.shootingPhase &&
+      player === this.opponentPlayer
+    ) {
       if (
         this.opponentPlayerBoard.array[row][col] === -1 ||
         this.opponentPlayerBoard.array[row][col].sunk === true
@@ -179,16 +191,47 @@ class SinglePlayerGame {
       currentlyViewing = boardHistory.length - 1;
 
       this.currentPlayer = this.opponentPlayer;
-      if (this.board1.allSunk) {
+
+      //Computer player makes a move
+      setTimeout(() => {
+        if (this.board0.allSunk || this.board1.allSunk) return;
+        let good_squares = [];
+        for (let row = 0; row < 10; row++) {
+          for (let col = 0; col < 10; col++) {
+            if (
+              this.opponentPlayerBoard.array[row][col] === -1 ||
+              this.opponentPlayerBoard.array[row][col].sunk === true
+            )
+              continue;
+            else {
+              good_squares.push([row, col]);
+            }
+          }
+        }
+        let [rowGuess, colGuess] =
+          good_squares[Math.floor(Math.random() * good_squares.length)];
+        this.opponentPlayerBoard = this.opponentPlayerBoard.shootSquare(
+          rowGuess,
+          colGuess
+        );
+        boardHistory.push([
+          `${char[colGuess].toUpperCase()}${rowGuess + 1}`,
+          SinglePlayerGame.saveGame(currentGame),
+          typeof this.opponentPlayerBoard.array[rowGuess][colGuess] ===
+            "object" && this.opponentPlayerBoard.array[rowGuess][colGuess].sunk,
+        ]);
+        currentlyViewing = boardHistory.length - 1;
+
+        this.currentPlayer = this.opponentPlayer;
         this.renderBothBoards();
-      }
-      if (this.board0.allSunk) {
-        this.renderBothBoards();
-      }
+      }, 300);
     }
+    //If player 0 clicked their own board and they still need to place all their ships
+
     if (
-      !this.currentPlayerBoard.canGameStart &&
-      player === this.currentPlayer
+      this.currentPlayer === 0 &&
+      player === this.currentPlayer &&
+      !this.currentPlayerBoard.canGameStart
     ) {
       let shipsLeft = this.currentPlayerBoard.shipsToPlace.slice(0);
       let shipLength = shipsLeft.shift();
@@ -199,76 +242,116 @@ class SinglePlayerGame {
         this.vertical
       );
       if (viable_squares.length === 0) return;
-
       this.currentPlayerBoard.placeShip(row, col, shipLength, this.vertical);
-      if (this.currentPlayerBoard.shipsToPlace.length === 0)
+
+      if (this.currentPlayerBoard.shipsToPlace.length === 0) {
         this.currentPlayer = this.opponentPlayer;
-      boardHistory.push([
-        `${char[col].toUpperCase()}${row + 1}`,
-        SinglePlayerGame.saveGame(currentGame),
-      ]);
-      currentlyViewing = boardHistory.length - 1;
+        boardHistory.push([
+          `${char[col].toUpperCase()}${row + 1}`,
+          SinglePlayerGame.saveGame(currentGame),
+        ]);
+        currentlyViewing = boardHistory.length - 1;
+        while (this.currentPlayerBoard.shipsToPlace.length != 0) {
+          let shipsLeft = this.currentPlayerBoard.shipsToPlace.slice(0);
+          let shipLength = shipsLeft.shift();
+          let goodSquares = [];
+          let verticalOrHorizontal = Math.random() < 0.5;
+          for (let row = 0; row < 10; row++) {
+            for (let col = 0; col < 10; col++) {
+              let viable_squares = this.currentPlayerBoard.checkShipPlacement(
+                row,
+                col,
+                shipLength,
+                verticalOrHorizontal
+              );
+              if (viable_squares.length != 0) goodSquares.push([row, col]);
+            }
+          }
+          let [randomRow, randomCol] =
+            goodSquares[Math.floor(Math.random() * goodSquares.length)];
+          this.currentPlayerBoard.placeShip(
+            randomRow,
+            randomCol,
+            shipLength,
+            verticalOrHorizontal
+          );
+          boardHistory.push([
+            `${char[randomCol].toUpperCase()}${randomRow + 1}`,
+            SinglePlayerGame.saveGame(currentGame),
+          ]);
+          currentlyViewing = boardHistory.length - 1;
+        }
+        this.currentPlayer = this.opponentPlayer;
+      } else {
+        boardHistory.push([
+          `${char[col].toUpperCase()}${row + 1}`,
+          SinglePlayerGame.saveGame(currentGame),
+        ]);
+        currentlyViewing = boardHistory.length - 1;
+      }
     }
 
     this.renderBothBoards();
   }
-
   renderBothBoards() {
     let latestGame = boardHistory[boardHistory.length - 1][1];
     let board0object = Board.load(latestGame.board0);
     let board1object = Board.load(latestGame.board1);
     let isGameFinished = board0object.allSunk || board1object.allSunk;
 
+    if (board1object.allSunk) {
+      if (doNotUpdateWin === false) {
+        postData("/api/updateGame", {
+          gamemode: "ai",
+          game: boardHistory,
+        });
+        postData("/api/addWin").then((res) => {
+          console.log(res);
+        });
+        doNotUpdateWin = true;
+      }
+    }
+
     if (isGameFinished) {
       this.renderBoard(0, grid0, this.board0, false);
       this.renderBoard(1, grid1, this.board1, false);
-    } else if (board0object.canGameStart && board1object.canGameStart) {
-      this.renderBoard(0, grid0, this.board0, true);
-      this.renderBoard(1, grid1, this.board1, true);
     } else {
-      this.renderBoard(0, grid0, this.board0, this.board0.canGameStart);
-      this.renderBoard(1, grid1, this.board1, this.board1.canGameStart);
+      this.renderBoard(0, grid0, this.board0, false);
+      this.renderBoard(1, grid1, this.board1, true);
     }
-
     if (this.shootingPhase) {
-      if (this.currentPlayer === 0) messageBox.innerHTML = `Player One's turn`;
+      if (this.currentPlayer === 0) messageBox.innerHTML = `Your turn`;
       if (
         this.currentPlayer === 0 &&
         currentlyViewing != boardHistory.length - 1
       ) {
-        messageBox.innerHTML = `(Viewing) Player One's Move`;
+        messageBox.innerHTML = `(Viewing) Your move`;
       }
-      if (this.currentPlayer === 1) messageBox.innerHTML = `Player Two's turn`;
+      if (this.currentPlayer === 1) messageBox.innerHTML = `Computer's turn`;
       if (
         this.currentPlayer === 1 &&
         currentlyViewing != boardHistory.length - 1
       ) {
-        messageBox.innerHTML = `(Viewing) Player Two's move`;
+        messageBox.innerHTML = `(Viewing) Computer's move`;
       }
     } else {
       if (this.currentPlayer === 0)
-        messageBox.innerHTML = `Player One, please place your ships`;
+        messageBox.innerHTML = `Please place your ships`;
       if (
         this.currentPlayer === 0 &&
         currentlyViewing != boardHistory.length - 1
       ) {
-        messageBox.innerHTML = `(Viewing) Player One's ship placements`;
+        messageBox.innerHTML = `(Viewing) Your ship placements`;
       }
 
       if (this.currentPlayer === 1)
-        messageBox.innerHTML = `Player Two, please place your ships`;
-      if (
-        this.currentPlayer === 1 &&
-        currentlyViewing != boardHistory.length - 1
-      ) {
-        messageBox.innerHTML = `(Viewing) Player Two's ship placements`;
-      }
+        messageBox.innerHTML = `(Viewing) Computer ship placements`;
     }
     if (this.board1.allSunk) {
-      messageBox.innerHTML = "Player One won!";
+      messageBox.innerHTML = "You won!";
     }
     if (this.board0.allSunk) {
-      messageBox.innerHTML = "Player Two Won!";
+      messageBox.innerHTML = "Computer Won!";
     }
 
     //Player move gui
@@ -277,7 +360,8 @@ class SinglePlayerGame {
 
     for (let i = 0; i < boardHistory.length; i++) {
       const node = document.createElement("div");
-      if (!isGameFinished && i >= 1 && i <= 10) {
+
+      if (!isGameFinished && i >= 6 && i <= 10) {
         node.innerHTML = `${i + 1}. --`;
       } else {
         node.innerHTML = `${i + 1}. ${boardHistory[i][0]}`;
@@ -529,24 +613,34 @@ let currentlyViewing = 0;
 let currentGame = new SinglePlayerGame(new Board(), new Board(), grid0, grid1);
 document.addEventListener("keypress", (e) => {
   if (e.key === "r") {
-    console.log(currentGame);
     currentGame.vertical = !currentGame.vertical;
   }
 });
 currentGame.startGame();
 
 postData("/api/fetchGame", {
-  gamemode: "passnplay",
+  gamemode: "ai",
 }).then((json) => {
   if (json.game === false) {
   } else {
     boardHistory = json.game;
     currentlyViewing = boardHistory.length - 1;
+
+    let latestGame = boardHistory[boardHistory.length - 1][1];
+    let board0object = Board.load(latestGame.board0);
+    let board1object = Board.load(latestGame.board1);
+
+    if (board1object.allSunk) {
+      console.log("Stopping win update");
+      doNotUpdateWin = true;
+    }
+
     currentGame = SinglePlayerGame.loadGame(
       boardHistory[currentlyViewing][1],
       grid0,
       grid1
     );
+
     currentGame.renderBothBoards();
 
     if (currentGame.shootingPhase) {
@@ -582,7 +676,7 @@ restartGame.addEventListener("click", () => {
   currentGame = new SinglePlayerGame(new Board(), new Board(), grid0, grid1);
   currentGame.startGame();
   postData("/api/updateGame", {
-    gamemode: "passnplay",
+    gamemode: "ai",
     game: boardHistory,
   }).then((json) => {
     console.log(json);
@@ -591,7 +685,7 @@ restartGame.addEventListener("click", () => {
 
 saveGame.addEventListener("click", () => {
   postData("/api/updateGame", {
-    gamemode: "passnplay",
+    gamemode: "ai",
     game: boardHistory,
   })
     .then((json) => {

@@ -1,5 +1,7 @@
+
 from flask import Flask, request, redirect, session, render_template, url_for
 from database import Database
+import json
 
 app = Flask(__name__)
 
@@ -68,13 +70,23 @@ def profile(id):
 def passnplay():
     if not is_logged_in():
         return redirect(url_for("login", error="You must be logged in!"))
-    return render_template("battleship.html")
+    data = user_data()
+    db = Database("database.db")
+    user_id=data["id"]
+    username=data["name"]
+    profilePic = db.fetch_picture(user_id)
+    return render_template("battleship.html", user_id=user_id, username=username, profilePic = profilePic)
 
 @app.route("/standard")
 def standard():
     if not is_logged_in():
         return redirect(url_for("login", error="You must be logged in!"))
-    return render_template("standard.html")
+    data = user_data()
+    db = Database("database.db")
+    user_id=data["id"]
+    username=data["name"]
+    profilePic = db.fetch_picture(user_id)
+    return render_template("battleshipAI.html", user_id=user_id, username=username, profilePic = profilePic)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -109,7 +121,7 @@ def login():
         user_id = db.fetch_user(user, pwd)
         db.close()
 
-        print(user_id)
+        
         if user_id is None:
             return redirect(url_for("login", error="Incorrect credentials"))
 
@@ -128,6 +140,63 @@ def logout():
 @app.errorhandler(404)
 def error_404(e):
     return render_template("error-redirect.html", message=e, url="/")
+
+@app.route("/api/updateGame", methods=["POST"])
+def updateGame():
+    if not is_logged_in():
+        return redirect(url_for("login", error="You must be logged in!"))
+    data = user_data()
+    db = Database("database.db")
+    user_id=data["id"]
+    req_json = request.json
+    args = {
+        "user_id" : user_id,
+        "gamemode" : req_json["gamemode"],
+        "game" : json.dumps(req_json["game"]),
+    }
+    
+    db.update_game(**args)
+    return {
+        "success": True
+    }
+
+@app.route("/api/fetchGame", methods=["POST"])
+def fetchGame():
+    if not is_logged_in():
+        return redirect(url_for("login", error="You must be logged in!"))
+    data = user_data()
+    db = Database("database.db")
+    user_id=data["id"]
+    req_json = request.json
+    args = {
+        "user_id" : user_id,
+        "gamemode" : req_json["gamemode"],
+    }
+    
+    game = db.fetch_game(**args)
+    
+    if(game == None):
+        return {
+            "game": False
+        }
+    else:
+        return {
+            "game": game
+        }
+        
+@app.route("/api/addWin", methods=["POST"])
+def addWin():
+    if not is_logged_in():
+        return redirect(url_for("login", error="You must be logged in!"))
+    data = user_data()
+    db = Database("database.db")
+    user_id=data["id"]
+
+    db.add_win(user_id=user_id)
+    return {
+        "success": True,
+        "message": "Win added"
+    }
 
 if __name__ == "__main__":
     app.secret_key = "foo"

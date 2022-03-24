@@ -1,3 +1,4 @@
+import json
 import sqlite3
 from os import path
 
@@ -20,9 +21,8 @@ class Database:
         self.cur.execute("""
             CREATE TABLE IF NOT EXISTS games(
               game_id INTEGER PRIMARY KEY,
-              player_one_id TEXT,
-              player_two_id TEXT,
-              player_one_won INTEGER
+              user_id INTEGER,
+              gamemode TEXT,
               game TEXT )""") 
 
         self.db.commit()
@@ -30,36 +30,30 @@ class Database:
 
     def close(self):
         self.db.close()
-
-    def add_game(self, player_one_id, player_two_id, player_one_won, game):
-        self.cur.execute("""
-            INSERT INTO games(
-              player_one_id,
-              player_two_id,
-              player_one_won,
-              game ) VALUES(?, ?, ?, ?)""", player_one_id, player_two_id, player_one_won, game)
-        self.db.commit()
-        return self.cur.lastrowid #game id
     
-    def fetch_game(self, game_id):
+    def fetch_game(self, user_id, gamemode):
+        print(user_id, gamemode)
         result = self.cur.execute("""
-            SELECT game_id, player_one_id, player_two_id, player_one_won, game
-            FROM   users
-            WHERE  game_id = ?
-        """, [game_id]).fetchone()
-        return result 
+            SELECT game
+            FROM   games
+            WHERE  user_id = ? and gamemode = ?
+        """, [user_id, gamemode]).fetchone()
+        if(result == None):
+            return None
+        else: 
+            return json.loads(result[0])
 
-    def update_game(self, game_id, game, player_one_won):
-        self.cur.execute("""
-            UPDATE games
-               SET player_one_won = ?, game = ?
-             WHERE game_id = ?""", (player_one_won, game, game_id))
+    def update_game(self, user_id, gamemode, game):
+        if(self.fetch_game(user_id, gamemode) != None):
+            self.cur.execute("""
+                UPDATE games
+                SET game = ?
+                WHERE user_id = ? and gamemode = ?""", (game, user_id, gamemode))
+        else:
+            self.cur.execute("""
+            INSERT INTO games(user_id, gamemode, game) VALUES(?, ?, ?)""", [user_id, gamemode, game])
+        self.db.commit()
 
-    def delete_game(self, game_id):
-        self.cur.execute("""
-        DELETE FROM table
-WHERE search_condition;
-        """)
 
     def fetch_user(self, username: str, password: str) -> int:
         """
@@ -164,9 +158,9 @@ WHERE search_condition;
         return img
 
     def add_win(self, user_id) -> int:
-        self.cur.execute("SELECT user FROM users WHERE id = ?", (user_id,))
+        self.cur.execute("SELECT wins FROM users WHERE id = ?", (user_id,))
         wins = index_nullable(self.cur.fetchone(), 0)
-        wins+= 1;
+        wins+= 1
         self.cur.execute("""
             UPDATE users
                SET wins = ?

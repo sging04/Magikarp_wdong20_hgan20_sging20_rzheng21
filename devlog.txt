@@ -118,3 +118,11 @@ rengZ 2022-03-22 08:41
  - Added login requirement checks to places that need it
  - CSS changes brought in line with everything
  - added 404 errorhandling
+
+haotianG 2022-03-23 22:37
+  - Passnplay and AI both functional
+  - UI improvements
+  - Bug fixes
+  - Saving games when you press "Save and Quit"
+  - You get one win if you beat the AI
+  - Profile pictures display on the battleship game now

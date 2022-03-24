@@ -15,18 +15,36 @@
     <link rel="stylesheet" href="static/css/stylesheettwo.css" />
     <title>Team Magikarp!</title>
   </head>
-  <body>
+  <body
+    style="
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    "
+  >
     <div
-      class="container text-center"
-      style="background-color: black; color: white"
+      class=""
+      style="background-color: transparent; color: white; margin-bottom: 100px"
     >
-      <h1 class="text-center" style="background-color: black; color: white">
+      <h1
+        class="text-center"
+        style="background-color: black; color: white; margin-bottom: 20px"
+      >
         Which game mode?
       </h1>
-      <a class="btn btn-secondary" href="/standard" role="button">Standard</a>
-      <a class="btn btn-primary" href="/passnplay" role="button"
-        >Pass and Play</a
-      >
+      <div style="display: flex; justify-content: center">
+        <a
+          class="btn btn-secondary"
+          style="margin-right: 20px"
+          href="/standard"
+          role="button"
+          >Standard</a
+        >
+        <a class="btn btn-primary" href="/passnplay" role="button"
+          >Pass and Play</a
+        >
+      </div>
     </div>
   </body>
 </html>

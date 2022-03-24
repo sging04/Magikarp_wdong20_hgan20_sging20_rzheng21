@@ -76,18 +76,14 @@
         <div class="users">
           <div>
             <img src="{{profilePic}}" width="40px" height="40px" />
-            <span>{{username}} (Player One)</span>
+            <span>{{username}}</span>
           </div>
           <div>
-            <img
-              src="/static/defaultProfilePicture.jpg"
-              width="40px"
-              height="40px"
-            />
-            <span>Player Two</span>
+            <img src="/static/robot.jpg" width="40px" height="40px" />
+            <span>Computer</span>
           </div>
         </div>
-        <section id="moveBox" style="">
+        <section id="moveBox">
           <div
             style="display: flex; align-items: center; justify-content: center"
           >
@@ -201,6 +197,6 @@
       console.log("{{profilePic}}");
     </script>
 
-    <script src="/static/js/battleship.js"></script>
+    <script src="/static/js/battleshipAI.js"></script>
   </body>
 </html>
