@@ -126,3 +126,8 @@ haotianG 2022-03-23 22:37
   - Saving games when you press "Save and Quit"
   - You get one win if you beat the AI
   - Profile pictures display on the battleship game now
+  
+ rengZ 2022-03-23 22:40
+  - Pulled website to server.
+  - Reset database and permissions for added website security + to help with database overhaul implemented by Haotian.
+  - Minor bug testing.
